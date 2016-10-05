@@ -12,3 +12,7 @@ RUN apt-get install -y bzip2
 # xdebug isn't available as a prebuilt extension in the parent image.
 RUN pecl install xdebug
 RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20151012/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini
+
+# This URL is sometimes 403'ing so we pull it into the image.
+RUN cd '/opt' && curl -L https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar xjvf -
+RUN ln -s /opt/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin

@@ -6,6 +6,8 @@ RUN apt-get update
 RUN apt-get install -y sudo
 RUN apt-get install -y sqlite3
 RUN apt-get install -y vim
+RUN apt-get install -y fontconfig
+RUN apt-get install -y bzip2
 
 # xdebug isn't available as a prebuilt extension in the parent image.
 RUN pecl install xdebug

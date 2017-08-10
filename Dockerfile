@@ -17,4 +17,5 @@ RUN apt-get install -y fontconfig
 RUN pecl install xdebug
 RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini
 
-RUN docker-php-ext-install bcmath 
+RUN apt-get install -y libxslt-dev
+RUN docker-php-ext-install bcmath xsl

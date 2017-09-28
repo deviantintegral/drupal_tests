@@ -2,8 +2,8 @@ FROM drupal:latest
 
 RUN apt-get update
 
-# Install Git.
-RUN apt-get install git -y
+# Install Git and wget.
+RUN apt-get install git wget -y
 
 # This URL is sometimes 403'ing so we pull it into the image.
 RUN apt-get install -y bzip2 libfontconfig
@@ -21,9 +21,8 @@ RUN pecl install xdebug
 RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini
 
 # Install composer.
-RUN apt-get install -y wget
-RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/f3333f3bc20ab8334f7f3dada808b8dfbfc46088/web/installer -O - -q | php -- --quiet
-RUN mv composer.phar /usr/local/bin/composer
+COPY install-composer.sh /usr/local/bin/
+RUN install-composer.sh
 
 # Install Robo and add RoboFile.php
 RUN wget http://robo.li/robo.phar

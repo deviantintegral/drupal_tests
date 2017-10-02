@@ -32,17 +32,5 @@ RUN chmod +x robo.phar && mv robo.phar /usr/local/bin/robo
 RUN apt-get install -y libxslt-dev
 RUN docker-php-ext-install bcmath xsl
 
-# A few common Javascript library dependencies.
-RUN apt-get install -y unzip
-RUN mkdir -p libraries/moment/min
-RUN wget -P libraries/moment/min http://momentjs.com/downloads/moment.min.js
-RUN wget -P libraries/moment/min https://momentjs.com/downloads/moment-timezone.min.js
-RUN mkdir -p libraries/vis
-RUN wget https://github.com/almende/vis/archive/v4.19.1.zip -O vis.zip
-RUN unzip vis.zip
-RUN mv vis-*/dist libraries/vis/
-RUN rm -rf vis-*
-RUN rm vis.zip
-
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"

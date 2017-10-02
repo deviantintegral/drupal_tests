@@ -1,4 +1,4 @@
-FROM drupal:latest
+FROM drupal:8.3-apache
 
 RUN apt-get update
 

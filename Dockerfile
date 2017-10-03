@@ -33,6 +33,8 @@ RUN chmod +x robo.phar && mv robo.phar /usr/local/bin/robo
 RUN apt-get install -y libxslt-dev
 RUN docker-php-ext-install bcmath xsl
 
+COPY hooks/* /var/www/html/
+
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"
 

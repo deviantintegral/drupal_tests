@@ -6,6 +6,7 @@ RUN apt-get update
 RUN apt-get install git wget -y
 
 # This URL is sometimes 403'ing so we pull it into the image.
+# This will be removed in favour of a separate container.
 RUN apt-get install -y bzip2 libfontconfig
 RUN cd '/opt' && curl -L https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar xjvf -
 RUN ln -s /opt/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin
@@ -34,3 +35,6 @@ RUN docker-php-ext-install bcmath xsl
 
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"
+
+# We need to expose port 80 for phantomjs containers.
+EXPOSE 80

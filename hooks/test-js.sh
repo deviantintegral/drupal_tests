@@ -9,7 +9,7 @@ apache2-foreground&
 
 robo add:behat-deps
 
-robo add:modules $repositoryName
+robo add:modules $1
 
 robo update:dependencies
 
@@ -17,4 +17,4 @@ robo setup:drupal || true
 
 chown -R www-data:www-data /var/www/html/sites/default/files
 
-vendor/bin/behat -v -c $(pwd)/modules/$repositoryName/tests/src/Behat/behat.yml
+vendor/bin/behat -v -c $(pwd)/modules/$1/tests/src/Behat/behat.yml

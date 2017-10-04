@@ -4,7 +4,7 @@
 
 robo add:coding-standards-deps
 
-robo add:modules $repositoryName
+robo add:modules $1
 
 robo update:dependencies
 
@@ -12,4 +12,4 @@ robo update:dependencies
 vendor/bin/phpcs --config-set installed_paths vendor/drupal/coder/coder_sniffer
 
 # Check coding standards
-vendor/bin/phpcs --standard=Drupal modules/$repositoryName
+vendor/bin/phpcs --standard=Drupal modules/$1

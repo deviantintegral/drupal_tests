@@ -1,0 +1,140 @@
+# Default configuration file for Draco modules.
+#
+# To use this in a new module:
+#   1. Copy the .circleci directory to the module.
+#   2. Update the working_directory key.
+#   3. Update the module path in the code-sniffer job.
+#   4. Connect CircleCI to the repository through the Circle UI.
+#   5. Set the COMPOSER_AUTH environment variable in Circle to grant Satis
+#      access.
+#   6. Create a status badge embed code in Circle and add it to the README.md.
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+
+defaults: &defaults
+  docker:
+    # specify the version you desire here
+    - image: andrewberry/drupal_tests:0.0.3
+
+    # Use our fork until https://github.com/wernight/docker-phantomjs/pull/3 is
+    # merged.
+    # - image: wernight/phantomjs:2.1.1
+    - image: andrewberry/docker-phantomjs:v2.1.1-patch1
+      command: [phantomjs, --webdriver=8910]
+
+    # Specify service dependencies here if necessary
+    # CircleCI maintains a library of pre-built images
+    # documented at https://circleci.com/docs/2.0/circleci-images/
+    # - image: circleci/mysql:9.4
+
+  # 'checkout' supports a path key, but not on locals where you test with the
+  # circleci CLI tool.
+  # https://discuss.circleci.com/t/bug-circleci-build-command-ignores-checkout-path-config/13004
+  working_directory: /var/www/html/modules/MODULE_NAME
+
+# YAML does not support merging of lists. That means we can't have a default
+# 'steps' configuration, though we can have defaults for individual step
+# properties.
+
+# We use the composer.json as a way to determine if we can cache our build.
+restore_cache: &restore_cache
+  keys:
+  - v1-dependencies-{{ checksum "composer.json" }}
+  # fallback to using the latest cache if no exact match is found
+  - v1-dependencies-
+
+# If composer.json hasn't changed, restore the vendor directory. We don't
+# restore the lock file so we ensure we get updated dependencies.
+save_cache: &save_cache
+  paths:
+    - ./vendor
+  key: v1-dependencies-{{ checksum "composer.json" }}
+
+# Run Drupal unit and kernel tests as one job. This command invokes the test.sh
+# hook.
+unit_kernel_tests: &unit_kernel_tests
+  <<: *defaults
+  steps:
+    - checkout
+
+    - restore_cache: *restore_cache
+    - save_cache: *save_cache
+
+    - run:
+        working_directory: /var/www/html
+        command: |
+          ./test.sh $CIRCLE_PROJECT_REPONAME
+
+    - store_test_results:
+        path: /tmp/phpunit
+    - store_artifacts:
+        path: /tmp/phpunit
+
+# Run Behat tests. This command invokes the test-js.sh hook.
+behat_tests: &behat_tests
+  <<: *defaults
+  steps:
+    - checkout
+
+    - restore_cache: *restore_cache
+    - save_cache: *save_cache
+
+    - run:
+        working_directory: /var/www/html
+        command: |
+          ./test-js.sh $CIRCLE_PROJECT_REPONAME
+
+# Run code quality tests. This invokes code-sniffer.sh.
+code_sniffer: &code_sniffer
+  <<: *defaults
+  steps:
+    - checkout
+
+    - restore_cache: *restore_cache
+    - save_cache: *save_cache
+
+    - run:
+        working_directory: /var/www/html
+        command: |
+          cp ./modules/$CIRCLE_PROJECT_REPONAME/.circleci/code-sniffer.sh /var/www/html
+          ./code-sniffer.sh $CIRCLE_PROJECT_REPONAME
+
+# Run code coverage tests. This invokes code-coverage-stats.sh.
+code_coverage: &code_coverage
+  <<: *defaults
+  steps:
+    - checkout
+
+    - restore_cache: *restore_cache
+    - save_cache: *save_cache
+
+    - run:
+        working_directory: /var/www/html
+        command: |
+          ./code-coverage-stats.sh $CIRCLE_PROJECT_REPONAME
+    - store_artifacts:
+        path: /var/www/html/sites/coverage.tar.gz
+
+# Declare all of the jobs we should run.
+version: 2
+jobs:
+  run-unit-kernel-tests:
+     <<: *unit_kernel_tests
+  run-behat-tests:
+     <<: *behat_tests
+  run-code-sniffer:
+     <<: *code_sniffer
+  run-code-coverage:
+     <<: *code_coverage
+
+workflows:
+  version: 2
+
+  # Declare a workflow that runs all of our jobs in parallel.
+  test_and_lint:
+    jobs:
+      - run-unit-kernel-tests
+      - run-behat-tests
+      - run-code-sniffer
+      - run-code-coverage

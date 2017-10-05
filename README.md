@@ -35,6 +35,66 @@ If you want to test a whole Drupal site, and not an individual module, see
        cp ./modules/$CIRCLE_PROJECT_REPONAME/.circleci/code-sniffer.sh /var/www/html
        ./code-sniffer.sh $CIRCLE_PROJECT_REPONAME
     ```
+1. Connect your repository to Circle. At this point, all jobs should run,
+   though no tests are actually being executed.
+
+## Getting started with tests
+
+1. Copy all of the files and directories from `templates/module` to the root of
+   your new module.
+1. Edit `phpunit.core.xml.dist` and set the whitelist paths for coverage
+   reports, replacing `my_module` with your module name.
+1. In `tests/src/Behat`, replace `my_module` and `MyModule` with your module name.
+1. Start writing tests!
+
+Unit, Kernel, Functional, and FunctionalJavascript tests all follow the same
+directory structure as with Drupal contributed modules. If the Drupal testbot
+could run your tests, this container should too.
+
+Tests are executed using `run-tests.sh`. Make sure each test class has a proper
+`@group` annotation, and that base classes do not have one. Likewise, make sure
+that each test is in the proper namespace. If a Unit test is in the Kernel
+namespace, things will break in hard-to-debug ways.
+
+FunctionalJavascript tests are not yet supported as we use Behat for those
+types of tests.
+
+### Behat tests
+
+Behat tests do not run on drupal.org, but we store them in a similar manner.
+Most Behat implementations are testing sites, and not modules, so their docs
+suggesting tests go in `sites/default/behat` don't apply. Instead, place tests
+in `tests/src/Behat`, so that you end up with:
+
+```
+* `tests/src/Behat`
+  * `behat.yml`
+  * `features/`
+    * `my_module_settings.feature`
+    * `bootstrap/`
+      * `MyModuleFeatureContext.php`
+```
+
+Behat can be buggy when using relative paths. To run your scenarios locally,
+run from the Drupal root directory with an absolute path to your configuration.
+
+```
+$ vendor/bin/behat -v -c $(pwd)/modules/my_module/tests/src/Behat/behat.yml
+```
+
+## Overriding PHPUnit configuration
+
+The `phpunit.core.xml.dist` configuration file is copied to Drupal's `core`
+directory before running tests. Feel free to edit this file in each module as
+needed.
+
+## Applying patches
+
+Sometimes, a module needs to apply patches to Drupal or another dependency to
+work correctly. For example, out of the box we patch Coder to not throw errors
+on Markdown files. To add or remove additional patches, edit `patches.json`
+using the same format as
+[composer-patches](https://github.com/cweagans/composer-patches).
 
 ## Testing against a new version of Drupal
 

@@ -1,4 +1,4 @@
-# Default configuration file for Draco modules.
+# Default configuration file for Drupal modules.
 #
 # To use this in a new module:
 #   1. Copy the .circleci directory to the module.

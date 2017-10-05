@@ -1,0 +1,5 @@
+{
+  "drupal/coder": {
+    "CodeSniffer testing all file extensions instead of the configured ones": "https://www.drupal.org/files/issues/2867601.11-disable-txt-sniffs.patch"
+  }
+}

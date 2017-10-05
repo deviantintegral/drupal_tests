@@ -66,14 +66,12 @@ Most Behat implementations are testing sites, and not modules, so their docs
 suggesting tests go in `sites/default/behat` don't apply. Instead, place tests
 in `tests/src/Behat`, so that you end up with:
 
-```
 * `tests/src/Behat`
   * `behat.yml`
   * `features/`
     * `my_module_settings.feature`
     * `bootstrap/`
       * `MyModuleFeatureContext.php`
-```
 
 Behat can be buggy when using relative paths. To run your scenarios locally,
 run from the Drupal root directory with an absolute path to your configuration.

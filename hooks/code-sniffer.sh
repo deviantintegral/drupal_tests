@@ -2,6 +2,8 @@
 
 # Runs CodeSniffer checks on a Drupal module.
 
+robo setup:skeleton
+
 robo add:coding-standards-deps
 
 robo add:modules $1

@@ -4,6 +4,9 @@
 #   1. Copy the .circleci directory to the module.
 #   2. Update the working_directory key.
 #   3. Update the module path in the code-sniffer job.
+#   4. If your module depends on a private Composer repository, add it to each
+#      job with an additional command in the run section before invoking hooks:
+#         composer config repositories.custom composer https://<my-repository-server>
 #   4. Connect CircleCI to the repository through the Circle UI.
 #   5. Set the COMPOSER_AUTH environment variable in Circle to grant Satis
 #      access.

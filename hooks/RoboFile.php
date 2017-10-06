@@ -51,6 +51,7 @@ class RoboFile extends \Robo\Tasks
         // hand.
         $config = json_decode(file_get_contents('composer.json'));
         $config->require->{"cweagans/composer-patches"} = "~1.0";
+        $config->require->{"drush/drush"} = "~9.0";
         $config->extra->{"enable-patching"} = 'true';
         $config->extra->{"patches"} = new \stdClass();
         file_put_contents('composer.json', json_encode($config));
@@ -74,6 +75,7 @@ class RoboFile extends \Robo\Tasks
         $config = json_decode(file_get_contents('composer.json'));
         $config->require->{"behat/mink-selenium2-driver"} = "^1.3";
         $config->require->{"drupal/drupal-extension"} = "master-dev";
+        $config->require->{"drush/drush"} = "~9.0";
         $config->require->{"guzzlehttp/guzzle"} = "^6.0@dev";
         file_put_contents('composer.json', json_encode($config));
     }

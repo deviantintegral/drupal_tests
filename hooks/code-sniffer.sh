@@ -14,4 +14,5 @@ robo update:dependencies
 vendor/bin/phpcs --config-set installed_paths vendor/drupal/coder/coder_sniffer
 
 # Check coding standards
-vendor/bin/phpcs --standard=Drupal modules/$1
+mkdir -p /tmp/phpcs
+vendor/bin/phpcs --standard=Drupal --report=junit modules/$1 > /tmp/phpcs/phpcs.xml

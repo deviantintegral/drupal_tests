@@ -100,6 +100,11 @@ code_sniffer: &code_sniffer
           cp ./modules/$CIRCLE_PROJECT_REPONAME/.circleci/code-sniffer.sh /var/www/html
           ./code-sniffer.sh $CIRCLE_PROJECT_REPONAME
 
+    - store_test_results:
+        path: /tmp/phpcs
+    - store_artifacts:
+        path: /tmp/phpcs
+
 # Run code coverage tests. This invokes code-coverage-stats.sh.
 code_coverage: &code_coverage
   <<: *defaults

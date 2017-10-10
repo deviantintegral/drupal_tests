@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-# Jenkins test.sh hook implementation.
+# CI test.sh hook implementation.
 
 export SIMPLETEST_BASE_URL="http://localhost"
 export SIMPLETEST_DB="sqlite://localhost//tmp/drupal.sqlite"
@@ -17,6 +17,4 @@ robo update:dependencies
 robo override:phpunit-config $1
 
 sudo -E -u www-data robo setup:drupal
-# sudo -u www-data robo test $1
-sudo -u www-data mkdir /tmp/phpunit
-sudo -u www-data php core/scripts/run-tests.sh --concurrency 31 --module $1 --verbose --xml /tmp/phpunit/ --sqlite /tmp/drupal-tests.sqlite
+sudo -u www-data php core/scripts/run-tests.sh --concurrency 31 --module $1 --verbose --xml artifacts/phpunit --sqlite /tmp/drupal-tests.sqlite

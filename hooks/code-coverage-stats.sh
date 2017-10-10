@@ -10,5 +10,5 @@ robo update:dependencies
 
 robo override:phpunit-config $1
 
-timeout 60m sudo -E -u www-data robo test:coverage $1 /var/www/html/sites || true
-tar czf /var/www/html/sites/coverage.tar.gz -C /var/www/html/sites coverage-html coverage-xml
+timeout 60m sudo -E -u www-data robo test:coverage $1 artifacts || true
+tar czf artifacts/coverage.tar.gz -C artifacts coverage-html coverage-xml

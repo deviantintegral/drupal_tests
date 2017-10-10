@@ -67,9 +67,9 @@ unit_kernel_tests: &unit_kernel_tests
           ./test.sh $CIRCLE_PROJECT_REPONAME
 
     - store_test_results:
-        path: /tmp/phpunit
+        path: /var/www/html/artifacts/phpunit
     - store_artifacts:
-        path: /tmp/phpunit
+        path: /var/www/html/artifacts
 
 # Run Behat tests. This command invokes the test-js.sh hook.
 behat_tests: &behat_tests
@@ -101,9 +101,9 @@ code_sniffer: &code_sniffer
           ./code-sniffer.sh $CIRCLE_PROJECT_REPONAME
 
     - store_test_results:
-        path: /tmp/phpcs
+        path: /var/www/html/artifacts/phpcs
     - store_artifacts:
-        path: /tmp/phpcs
+        path: /var/www/html/artifacts
 
 # Run code coverage tests. This invokes code-coverage-stats.sh.
 code_coverage: &code_coverage
@@ -119,7 +119,7 @@ code_coverage: &code_coverage
         command: |
           ./code-coverage-stats.sh $CIRCLE_PROJECT_REPONAME
     - store_artifacts:
-        path: /var/www/html/sites/coverage.tar.gz
+        path: /var/www/html/artifacts
 
 # Declare all of the jobs we should run.
 version: 2

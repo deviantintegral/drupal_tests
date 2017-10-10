@@ -55,6 +55,17 @@ class RoboFile extends \Robo\Tasks
         $config->extra->{"enable-patching"} = 'true';
         $config->extra->{"patches"} = new \stdClass();
         file_put_contents('composer.json', json_encode($config));
+
+        // Create a directory for our artifacts.
+        $this->taskFilesystemStack()
+          ->mkdir('artifacts')
+          ->mkdir('artifacts/phpunit')
+          ->mkdir('artifacts/phpcs')
+          ->run();
+
+        $this->taskFilesystemStack()
+          ->chown('artifacts', 'www-data', TRUE)
+          ->run();
     }
 
     /**
@@ -169,6 +180,11 @@ class RoboFile extends \Robo\Tasks
         $this->taskFilesystemStack()->remove('composer.lock')->run();
         $this->taskComposerUpdate()
           ->optimizeAutoloader()
+          ->run();
+
+        // Preserve composer.lock as an artifact for future debugging.
+        $this->taskFilesystemStack()
+          ->copy('composer.lock', 'artifacts/composer.lock')
           ->run();
     }
 

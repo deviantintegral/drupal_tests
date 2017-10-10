@@ -1,9 +1,9 @@
 # Default configuration file for Drupal modules.
 #
 # To use this in a new module:
-#   1. Copy the .circleci directory to the module.
-#   2. Update the working_directory key.
-#   3. Update the module path in the code-sniffer job.
+#   1. Copy config.yml to the module's .circleci directory.
+#   2. Change 'latest' in the image tag to the latest tag.
+#   3. Update the working_directory key.
 #   4. Connect CircleCI to the repository through the Circle UI.
 #   5. Set the COMPOSER_AUTH environment variable in Circle to grant access to
 #      any private repositories.
@@ -14,8 +14,8 @@
 
 defaults: &defaults
   docker:
-    # specify the version you desire here
-    - image: andrewberry/drupal_tests:0.0.3
+    # specify the version you desire here (avoid latest except for testing)
+    - image: andrewberry/drupal_tests:latest
 
     # Use our fork until https://github.com/wernight/docker-phantomjs/pull/3 is
     # merged.
@@ -67,9 +67,9 @@ unit_kernel_tests: &unit_kernel_tests
           ./test.sh $CIRCLE_PROJECT_REPONAME
 
     - store_test_results:
-        path: /tmp/phpunit
+        path: /var/www/html/artifacts/phpunit
     - store_artifacts:
-        path: /tmp/phpunit
+        path: /var/www/html/artifacts
 
 # Run Behat tests. This command invokes the test-js.sh hook.
 behat_tests: &behat_tests
@@ -101,9 +101,9 @@ code_sniffer: &code_sniffer
           ./code-sniffer.sh $CIRCLE_PROJECT_REPONAME
 
     - store_test_results:
-        path: /tmp/phpcs
+        path: /var/www/html/artifacts/phpcs
     - store_artifacts:
-        path: /tmp/phpcs
+        path: /var/www/html/artifacts
 
 # Run code coverage tests. This invokes code-coverage-stats.sh.
 code_coverage: &code_coverage
@@ -119,7 +119,7 @@ code_coverage: &code_coverage
         command: |
           ./code-coverage-stats.sh $CIRCLE_PROJECT_REPONAME
     - store_artifacts:
-        path: /var/www/html/sites/coverage.tar.gz
+        path: /var/www/html/artifacts
 
 # Declare all of the jobs we should run.
 version: 2

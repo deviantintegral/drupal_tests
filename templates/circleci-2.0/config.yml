@@ -1,9 +1,9 @@
 # Default configuration file for Drupal modules.
 #
 # To use this in a new module:
-#   1. Copy the .circleci directory to the module.
-#   2. Update the working_directory key.
-#   3. Update the module path in the code-sniffer job.
+#   1. Copy config.yml to the module's .circleci directory.
+#   2. Change 'latest' in the image tag to the latest tag.
+#   3. Update the working_directory key.
 #   4. Connect CircleCI to the repository through the Circle UI.
 #   5. Set the COMPOSER_AUTH environment variable in Circle to grant access to
 #      any private repositories.
@@ -14,8 +14,8 @@
 
 defaults: &defaults
   docker:
-    # specify the version you desire here
-    - image: andrewberry/drupal_tests:0.0.3
+    # specify the version you desire here (avoid latest except for testing)
+    - image: andrewberry/drupal_tests:latest
 
     # Use our fork until https://github.com/wernight/docker-phantomjs/pull/3 is
     # merged.

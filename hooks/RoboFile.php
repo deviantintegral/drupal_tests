@@ -181,6 +181,11 @@ class RoboFile extends \Robo\Tasks
         $this->taskComposerUpdate()
           ->optimizeAutoloader()
           ->run();
+
+        // Preserve composer.lock as an artifact for future debugging.
+        $this->taskFilesystemStack()
+          ->copy('composer.lock', 'artifacts/composer.lock')
+          ->run();
     }
 
     /**

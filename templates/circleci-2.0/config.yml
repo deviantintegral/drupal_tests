@@ -101,7 +101,6 @@ code_sniffer: &code_sniffer
     - run:
         working_directory: /var/www/html
         command: |
-          cp ./modules/$CIRCLE_PROJECT_REPONAME/.circleci/code-sniffer.sh /var/www/html
           ./code-sniffer.sh $CIRCLE_PROJECT_REPONAME
 
     - store_test_results:

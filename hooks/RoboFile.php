@@ -27,8 +27,10 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * The database URL.
+     *
+     * This must be 127.0.0.1 so it can work over a TCP socket.
      */
-    const DB_URL = 'sqlite://sites/default/files/.ht.sqlite';
+    const DB_URL = 'mysql://root@127.0.0.1/drupal8';
 
     /**
      * Files which we don't want to copy into the module directory.

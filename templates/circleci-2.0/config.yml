@@ -23,6 +23,10 @@ defaults: &defaults
     - image: andrewberry/docker-phantomjs:v2.1.1-patch1
       command: [phantomjs, --webdriver=8910]
 
+    - image: mariadb:10.3
+      environment:
+        MYSQL_ALLOW_EMPTY_PASSWORD: 1
+
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
     # documented at https://circleci.com/docs/2.0/circleci-images/

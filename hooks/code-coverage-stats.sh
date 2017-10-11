@@ -4,6 +4,8 @@ export SIMPLETEST_BASE_URL="http://localhost"
 export SIMPLETEST_DB="sqlite://localhost//tmp/drupal.sqlite"
 export BROWSERTEST_OUTPUT_DIRECTORY="/var/www/html/sites/simpletest"
 
+robo setup:skeleton
+
 robo add:modules $1
 
 robo update:dependencies

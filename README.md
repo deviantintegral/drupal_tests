@@ -45,6 +45,10 @@ If you want to test a whole Drupal site, and not an individual module, see
 1. Edit `phpunit.core.xml.dist` and set the whitelist paths for coverage
    reports, replacing `my_module` with your module name.
 1. In `tests/src/Behat`, replace `my_module` and `MyModule` with your module name.
+1. In your module's directory, include the required development dependencies:
+   ```sh
+   $ composer require --dev --no-update behat/mink-selenium2-driver drupal/coder drupal/drupal-extension bex/behat-screenshot
+   ```
 1. Start writing tests!
 
 Unit, Kernel, Functional, and FunctionalJavascript tests all follow the same

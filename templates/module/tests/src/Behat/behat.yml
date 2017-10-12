@@ -31,3 +31,8 @@ default:
         message_selector: '.messages'
         error_message_selector: '.messages--error'
         success_message_selector: '.messages--status'
+    Bex\Behat\ScreenshotExtension:
+      screenshot_taking_mode: all_scenarios
+      image_drivers:
+        local:
+          screenshot_directory: '/var/www/html/artifacts/screenshots'

@@ -16,5 +16,4 @@ robo update:dependencies
 
 robo override:phpunit-config $1
 
-sudo -E -u www-data robo setup:drupal
-sudo -u www-data php core/scripts/run-tests.sh --concurrency 31 --module $1 --verbose --xml artifacts/phpunit --sqlite /tmp/drupal-tests.sqlite
+sudo -E -u www-data vendor/bin/phpunit -c core --group $1 --debug --verbose --log-junit artifacts/phpunit/phpunit.xml

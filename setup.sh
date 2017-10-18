@@ -47,4 +47,12 @@ then
   echo 'tests/src/Behat/behat.local.yml' >> .gitignore
 fi
 
+composer require --dev --no-update \
+    behat/mink-selenium2-driver \
+    drupal/coder \
+    drupal/drupal-extension \
+    bex/behat-screenshot \
+    phpmd/phpmd \
+    phpmetrics/phpmetrics
+
 echo 'Setup complete. You are now ready to test with CircleCI!'

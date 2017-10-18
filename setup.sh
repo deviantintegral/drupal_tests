@@ -33,11 +33,11 @@ perl -i -pe "s/my_module/$MODULE/g" phpunit.core.xml.dist
 
 # Download and set up the Behat testing configuration.
 mkdir -p "tests/src/Behat/features/bootstrap"
-
 curl -s -L -q https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/module/tests/src/Behat/behat.yml > tests/src/Behat/behat.yml
 curl -s -L -q https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/module/tests/src/Behat/example.behat.local.yml > tests/src/Behat/example.behat.local.yml
 curl -s -L -q https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/module/tests/src/Behat/features/bootstrap/MyModuleFeatureContext.php > tests/src/Behat/features/bootstrap/${MODULE_CC}FeatureContext.php
 
+# Replace placeholders in the Behat configuration.
 perl -i -pe "s/my_module/$MODULE/g" tests/src/Behat/features/bootstrap/${MODULE_CC}FeatureContext.php tests/src/Behat/example.behat.local.yml tests/src/Behat/behat.yml
 perl -i -pe "s/MyModule/$MODULE_CC/g" tests/src/Behat/features/bootstrap/${MODULE_CC}FeatureContext.php tests/src/Behat/example.behat.local.yml tests/src/Behat/behat.yml
 

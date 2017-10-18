@@ -22,4 +22,4 @@ jobs:
             mv test_this_branch test_last_tag artifacts
 
       - store_artifacts:
-          path: ~/artifacts
+          path: artifacts

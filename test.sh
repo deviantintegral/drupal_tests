@@ -30,17 +30,5 @@ then
   exit 1
 fi
 set -e
-cd ..
-
-# Finally, test using a real module!
-git clone https://github.com/BurdaMagazinOrg/module-fb_instant_articles.git fb_instant_articles
-cd fb_instant_articles
-git checkout 66f934b196d6415f7f2dbad48d57653a7d02ee84
-../setup.sh
-circleci build --job run-unit-kernel-tests
-circleci build --job run-behat-tests
-# We don't run the code coverage job because it's very slow
-circleci build --job run-code-sniffer-tests
-cd ..
 
 echo 'All tests have passed.'

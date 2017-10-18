@@ -9,9 +9,8 @@ jobs:
       - run:
           name: Install test dependencies
           command: |
-            apt update && apt install git curl perl -y
-            curl -o /usr/local/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && chmod +x /usr/local/bin/circleci
-            ./install-composer.sh
+            sudo curl -o /usr/local/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci
+            sudo ./install-composer.sh
 
       - run:
           name: Run tests

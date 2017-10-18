@@ -7,7 +7,7 @@ cd test_this_branch
 set +e
 egrep -r '(my_module|MyModule)' * .circleci .gitignore
 CHECK=$?
-if [ ! $? ]
+if [ $CHECK -eq 0 ]
 then
   exit 1
 fi
@@ -21,7 +21,7 @@ cd test_last_tag
 set +e
 egrep -r '(my_module|MyModule)' * .circleci .gitignore
 CHECK=$?
-if [ ! $? ]
+if [ $CHECK -eq 0 ]
 then
   exit 1
 fi

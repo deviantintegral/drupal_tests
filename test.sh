@@ -3,8 +3,10 @@
 # Test first manually specifying a branch
 git init test_this_branch
 cd test_this_branch
-../setup.sh
-if [ $(egrep -r (my_module|MyModule) * .circleci .gitignore) ]
+../setup.sh $1
+egrep -r '(my_module|MyModule)' * .circleci .gitignore
+CHECK=$?
+if [ $? ]
 then
   exit 1
 fi
@@ -14,7 +16,9 @@ cd ..
 git init test_last_tag
 cd test_last_tag
 ../setup.sh
-if [ $(egrep -r (my_module|MyModule) * .circleci .gitignore) ]
+egrep -r '(my_module|MyModule)' * .circleci .gitignore
+CHECK=$?
+if [ $? ]
 then
   exit 1
 fi

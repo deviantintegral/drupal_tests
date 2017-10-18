@@ -35,7 +35,7 @@ defaults: &defaults
   # 'checkout' supports a path key, but not on locals where you test with the
   # circleci CLI tool.
   # https://discuss.circleci.com/t/bug-circleci-build-command-ignores-checkout-path-config/13004
-  working_directory: /var/www/html/modules/MODULE_NAME
+  working_directory: /var/www/html/modules/my_module
 
 # YAML does not support merging of lists. That means we can't have a default
 # 'steps' configuration, though we can have defaults for individual step

@@ -8,3 +8,12 @@ jobs:
       - run:
           name: Run tests
           command: ./test.sh $CIRCLE_BRANCH
+
+      - run:
+          name: Move artifacts
+          command: |
+            mkdir artifacts
+            mv test_this_branch test_last_tag artifacts
+
+    - store_artifacts:
+        path: ~/artifacts

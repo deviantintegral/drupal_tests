@@ -7,12 +7,6 @@ jobs:
       - checkout
 
       - run:
-          name: Install test dependencies
-          command: |
-            sudo curl -o /usr/local/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci
-            sudo ./install-composer.sh
-
-      - run:
           name: Run tests
           command: ./test.sh $CIRCLE_BRANCH
 

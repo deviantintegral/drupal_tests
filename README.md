@@ -21,9 +21,15 @@ If you want to test a whole Drupal site, and not an individual module, see
 
 ## Getting started with CircleCI
 
-1. Copy the `templates/circleci-2.0` directory to your module repository as
-  `.circleci`.
-1. Follow the steps at the top of the file.
+1. `cd` to the directory with your Drupal module. Make sure it's a git
+   repository first!
+1. `curl https://github.com/deviantintegral/drupal_tests/raw/master/setup.sh | bash`
+1. Review and commit the new files.
+1. Connect the repository to CircleCI.
+1. Add a `COMPOSER_AUTH` environment variable to Circle if you are using
+   private repositories.
+1. Push a branch . At this point, all jobs should run, though no tests are
+   actually being executed.
 1. To override a given hook, copy it to your `.circleci` directory. Then, in
    the run step, copy the script to the root of the project. For example, if
    you need to override `hooks/code-sniffer.sh`, the `run` step for the
@@ -35,8 +41,6 @@ If you want to test a whole Drupal site, and not an individual module, see
        cp ./modules/$CIRCLE_PROJECT_REPONAME/.circleci/code-sniffer.sh /var/www/html
        ./code-sniffer.sh $CIRCLE_PROJECT_REPONAME
     ```
-1. Connect your repository to Circle. At this point, all jobs should run,
-   though no tests are actually being executed.
 
 ## Getting started with tests
 

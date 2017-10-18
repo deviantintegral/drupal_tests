@@ -1,6 +1,7 @@
 # Default configuration file for Drupal modules.
 #
-# To use this in a new module:
+# Use setup.sh to automate setting this up. Otherwise, to use this in a new
+# module:
 #   1. Copy config.yml to the module's .circleci directory.
 #   2. Change 'latest' in the image tag to the latest tag.
 #   3. Update the working_directory key.

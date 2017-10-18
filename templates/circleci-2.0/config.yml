@@ -1,6 +1,7 @@
 # Default configuration file for Drupal modules.
 #
-# To use this in a new module:
+# Use setup.sh to automate setting this up. Otherwise, to use this in a new
+# module:
 #   1. Copy config.yml to the module's .circleci directory.
 #   2. Change 'latest' in the image tag to the latest tag.
 #   3. Update the working_directory key.
@@ -35,7 +36,7 @@ defaults: &defaults
   # 'checkout' supports a path key, but not on locals where you test with the
   # circleci CLI tool.
   # https://discuss.circleci.com/t/bug-circleci-build-command-ignores-checkout-path-config/13004
-  working_directory: /var/www/html/modules/MODULE_NAME
+  working_directory: /var/www/html/modules/my_module
 
 # YAML does not support merging of lists. That means we can't have a default
 # 'steps' configuration, though we can have defaults for individual step

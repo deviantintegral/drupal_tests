@@ -44,6 +44,8 @@ If you want to test a whole Drupal site, and not an individual module, see
 
 ## Getting started with tests
 
+If you ran `setup.sh` these steps have been done automatically.
+
 1. Copy all of the files and directories from `templates/module` to the root of
    your new module.
 1. Edit `phpunit.core.xml.dist` and set the whitelist paths for coverage

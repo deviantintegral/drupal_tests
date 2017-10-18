@@ -5,6 +5,12 @@ jobs:
       - image: debian:stretch
     steps:
       - checkout
+
+      - run:
+          name: Install git
+          command: |
+            apt update && apt install git -y
+
       - run:
           name: Run tests
           command: ./test.sh $CIRCLE_BRANCH

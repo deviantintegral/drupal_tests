@@ -24,12 +24,12 @@ mkdir -p .circleci
 curl -s -L https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/circleci-2.0/config.yml > .circleci/config.yml
 
 # Update the container version in the config file.
-sed -i '' "s/andrewberry\/drupal_tests:latest/andrewberry\/drupal_tests:$TAG/g" .circleci/config.yml
-sed -i '' "s/my_module/$MODULE/g" .circleci/config.yml
+perl -i -pe "s/andrewberry\/drupal_tests:latest/andrewberry\/drupal_tests:$TAG/g" .circleci/config.yml
+perl -i -pe "s/my_module/$MODULE/g" .circleci/config.yml
 
 # Set up phpunit with code coverage for this module.
 curl -s -L -q -OJ https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/module/phpunit.core.xml.dist
-sed -i '' "s/my_module/$MODULE/g" phpunit.core.xml.dist
+perl -i -pe "s/my_module/$MODULE/g" phpunit.core.xml.dist
 
 # Download and set up the Behat testing configuration.
 mkdir -p "tests/src/Behat/features/bootstrap"
@@ -38,8 +38,8 @@ curl -s -L -q https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates
 curl -s -L -q https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/module/tests/src/Behat/example.behat.local.yml > tests/src/Behat/example.behat.local.yml
 curl -s -L -q https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/module/tests/src/Behat/features/bootstrap/MyModuleFeatureContext.php > tests/src/Behat/features/bootstrap/${MODULE_CC}FeatureContext.php
 
-sed -i '' "s/my_module/$MODULE/g" tests/src/Behat/features/bootstrap/${MODULE_CC}FeatureContext.php tests/src/Behat/example.behat.local.yml tests/src/Behat/behat.yml
-sed -i '' "s/MyModule/$MODULE_CC/g" tests/src/Behat/features/bootstrap/${MODULE_CC}FeatureContext.php tests/src/Behat/example.behat.local.yml tests/src/Behat/behat.yml
+perl -i -pe "s/my_module/$MODULE/g" tests/src/Behat/features/bootstrap/${MODULE_CC}FeatureContext.php tests/src/Behat/example.behat.local.yml tests/src/Behat/behat.yml
+perl -i -pe "s/MyModule/$MODULE_CC/g" tests/src/Behat/features/bootstrap/${MODULE_CC}FeatureContext.php tests/src/Behat/example.behat.local.yml tests/src/Behat/behat.yml
 
 touch .gitignore
 if [ ! $(grep behat.local.yml .gitignore) ]

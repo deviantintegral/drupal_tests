@@ -6,6 +6,8 @@ jobs:
     steps:
       - checkout
 
+      - setup_remote_docker
+
       - run:
           name: Run tests
           command: ./test.sh $CIRCLE_BRANCH
@@ -14,7 +16,7 @@ jobs:
           name: Move artifacts
           command: |
             mkdir artifacts
-            mv test_this_branch test_last_tag artifacts
+            mv test_this_branch test_last_tag fb_instant_articles artifacts
 
       - store_artifacts:
           path: artifacts

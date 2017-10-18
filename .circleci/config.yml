@@ -7,9 +7,9 @@ jobs:
       - checkout
 
       - run:
-          name: Install git
+          name: Install test dependencies
           command: |
-            apt update && apt install git -y
+            apt update && apt install git curl perl -y
 
       - run:
           name: Run tests

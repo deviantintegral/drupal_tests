@@ -5,7 +5,8 @@ git init test_this_branch
 cd test_this_branch
 composer init -n --name=example/test
 ../setup.sh $1
-circleci config validate
+sudo ls -la .circleci
+sudo circleci config validate
 set +e
 egrep -r '(my_module|MyModule)' * .circleci .gitignore
 CHECK=$?

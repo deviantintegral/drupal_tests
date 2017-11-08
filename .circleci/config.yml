@@ -6,6 +6,20 @@ jobs:
     steps:
       - checkout
 
+      - setup_remote_docker
+
+      - run:
+          name: Install circleci
+          command: |
+            set -x
+            sudo curl -o /usr/local/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci
+            ls -la .circleci
+            circleci --verbose config validate
+            git clone https://github.com/BurdaMagazinOrg/module-fb_instant_articles.git
+            cd module-fb_instant_articles
+            git checkout 8.x-2.0
+            circleci build -e CIRCLE_PROJECT_REPONAME=module-fb_instant_articles --job run-unit-kernel-tests
+
       - run:
           name: Run tests
           command: ./test.sh $CIRCLE_BRANCH

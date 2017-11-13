@@ -110,6 +110,25 @@ on Markdown files. To add or remove additional patches, edit `patches.json`
 using the same format as
 [composer-patches](https://github.com/cweagans/composer-patches).
 
+## Updating templates in modules
+
+To update to the latest release of this template, simply run `setup.sh` again.
+Be sure to review for any customizations you may want to preserve. For example:
+
+```sh
+$ git checkout -b update-circleci
+$ curl -L https://github.com/deviantintegral/drupal_tests/raw/master/setup.sh | bash
+$ git add -p # Add all changes you want to make.
+$ git checkout -p # Remove any changes you don't want to make.
+$ git status # Check for any newly added files.
+$ git commit
+```
+
+In terms of semantic versioning, we consider the Docker image to be our
+"public" API. In other words, we will bump the major version (or minor pre-1.0)
+if updating the container also requires changes to the template files in a
+given module.
+
 ## Testing against a new version of Drupal
 
 The Docker container builds against the stable branch of Drupal core, such as

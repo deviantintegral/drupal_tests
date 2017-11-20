@@ -50,7 +50,7 @@ fi
 composer require --dev --no-update \
     behat/mink-selenium2-driver \
     drupal/coder \
-    drupal/drupal-extension \
+    drupal/drupal-extension:master-dev \
     bex/behat-screenshot \
     phpmd/phpmd \
     phpmetrics/phpmetrics

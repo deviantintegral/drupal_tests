@@ -151,4 +151,6 @@ workflows:
       - run-unit-kernel-tests
       - run-behat-tests
       - run-code-sniffer
-      - run-code-coverage
+      - run-code-coverage:
+          requires:
+            - run-unit-kernel-tests

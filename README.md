@@ -10,6 +10,22 @@ A Docker container and template for testing individual Drupal modules with:
 If you want to test a whole Drupal site, and not an individual module, see
 [d8cidemo](https://github.com/juampynr/d8cidemo).
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Features](#features)
+- [Getting started with CircleCI](#getting-started-with-circleci)
+- [Getting started with tests](#getting-started-with-tests)
+  - [Behat tests](#behat-tests)
+  - [Debugging Behat tests](#debugging-behat-tests)
+- [Overriding PHPUnit configuration](#overriding-phpunit-configuration)
+- [Applying patches](#applying-patches)
+- [Updating templates in modules](#updating-templates-in-modules)
+- [Testing against a new version of Drupal](#testing-against-a-new-version-of-drupal)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Features
 
 * A Dockerfile extending the

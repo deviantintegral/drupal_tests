@@ -21,8 +21,7 @@ defaults: &defaults
     # Use our fork until https://github.com/wernight/docker-phantomjs/pull/3 is
     # merged.
     # - image: wernight/phantomjs:2.1.1
-    - image: andrewberry/docker-phantomjs:v2.1.1-patch1
-      command: [phantomjs, --webdriver=8910]
+    - image: selenium/standalone-chrome-debug:3.7.1-beryllium
 
     - image: mariadb:10.3
       environment:

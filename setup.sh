@@ -48,6 +48,7 @@ then
 fi
 
 composer require --dev --no-update \
+    cweagans/composer-patches \
     behat/mink-selenium2-driver \
     drupal/coder \
     drupal/drupal-extension:master-dev \

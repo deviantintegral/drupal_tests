@@ -10,6 +10,22 @@ A Docker container and template for testing individual Drupal modules with:
 If you want to test a whole Drupal site, and not an individual module, see
 [d8cidemo](https://github.com/juampynr/d8cidemo).
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Features](#features)
+- [Getting started with CircleCI](#getting-started-with-circleci)
+- [Getting started with tests](#getting-started-with-tests)
+  - [Behat tests](#behat-tests)
+  - [Debugging Behat tests](#debugging-behat-tests)
+- [Overriding PHPUnit configuration](#overriding-phpunit-configuration)
+- [Applying patches](#applying-patches)
+- [Updating templates in modules](#updating-templates-in-modules)
+- [Testing against a new version of Drupal](#testing-against-a-new-version-of-drupal)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Features
 
 * A Dockerfile extending the
@@ -95,6 +111,33 @@ run from the Drupal root directory with an absolute path to your configuration.
 ```
 $ vendor/bin/behat -v -c $(pwd)/modules/my_module/tests/src/Behat/behat.yml
 ```
+
+### Debugging Behat tests
+
+Behat is configured to use Selenium and Chrome along with a VNC server. If your
+CI provider allows SSH access to containers, you can forward ports to inspect
+the build.
+
+In CircleCI, first rebuild the Behat job with SSH. Once you have the SSH command
+to run, forward ports as needed. For example, to point port `8080` on your local
+machine to Apache, and port `5900` to the VNC server, run:
+
+`$ <ssh command copied from the job> -L8080:localhost:80 -L5900:localhost:80`
+
+The container's site will now be available at `http://localhost:8080`. To log
+in to Drupal, use `drush user-login` from SSH inside of the container.
+
+```sh
+$ cd /var/www/html
+$ vendor/bin/drush -l localhost:8080 user-login
+```
+
+Click the link that is printed out and you should be logged in as
+administrator.
+
+For VNC, connect to `localhost:5900` with the VNC client of your choice. The
+VNC password is `secret`. If you manually run Behat tests from within the
+SSH connection, you should see Chrome start and tests execute.
 
 ## Overriding PHPUnit configuration
 

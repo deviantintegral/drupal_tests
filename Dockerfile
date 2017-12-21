@@ -30,8 +30,9 @@ RUN echo 'extension=/usr/local/lib/php/extensions/no-debug-non-zts-20160303/imag
 COPY install-composer.sh /usr/local/bin/
 RUN install-composer.sh
 
-# Install Robo and add RoboFile.php
-RUN wget http://robo.li/robo.phar
+# Install Robo CI.
+# @TODO replace the following URL by http://robo.li/robo.phar when the Robo team fixes it.
+RUN wget https://github.com/consolidation/Robo/releases/download/1.1.5/robo.phar
 RUN chmod +x robo.phar && mv robo.phar /usr/local/bin/robo
 
 # php-dom and bcmath dependencies

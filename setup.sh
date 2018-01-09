@@ -58,6 +58,7 @@ drupal_tests_install() {
   composer require --dev --no-update \
       cweagans/composer-patches \
       behat/mink-selenium2-driver \
+      behat/mink-extension:v2.2 \
       drupal/coder \
       drupal/drupal-extension:master-dev \
       bex/behat-screenshot \

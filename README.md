@@ -43,7 +43,8 @@ If you want to test a whole Drupal site, and not an individual module, see
 1. Review and commit the new files.
 1. Connect the repository to CircleCI.
 1. Add a `COMPOSER_AUTH` environment variable to Circle if you are using
-   private repositories.
+   private repositories. See the [composer documentation on `COMPOSER_AUTH`](https://getcomposer.org/doc/03-cli.md#composer-auth)
+   for more details.
 1. Push a branch . At this point, all jobs should run, though no tests are
    actually being executed.
 1. To override a given hook, copy it to your `.circleci` directory. Then, in

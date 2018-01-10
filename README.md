@@ -35,6 +35,11 @@ If you want to test a whole Drupal site, and not an individual module, see
 * Most of the logic is in shell scripts and Robo commands, making it easy to
   run under a different CI tool.
 
+See
+[this example repository using Drupal's node module](https://github.com/deviantintegral/drupal_tests_node_example)
+for a live example of how this template is set up, and what sort of reports you
+will see in CircleCI for each job.
+
 ## Getting started with CircleCI
 
 1. `cd` to the directory with your Drupal module. Make sure it's a git

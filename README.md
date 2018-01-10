@@ -200,5 +200,9 @@ When a new minor version of Drupal is released:
 1. Test locally with `circleci build --job run-unit-kernel-tests` and so on for
    each job.
 1. Submit a pull request to this repository.
+1. Add a
+   [build configuration](https://hub.docker.com/r/andrewberry/drupal_tests/~/settings/automated-builds/)
+   in Docker Hub with the new tag to insure linked repositories cause a
+   rebuild.
 1. After merging and when Docker hub has built a new tag, update your
    `config.yml` to point to it.

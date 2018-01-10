@@ -204,7 +204,7 @@ When a new minor version of Drupal is released:
 1. Submit a pull request to this repository.
 1. Add a
    [build configuration](https://hub.docker.com/r/andrewberry/drupal_tests/~/settings/automated-builds/)
-   in Docker Hub with the new tag to insure linked repositories cause a
+   in Docker Hub with the new tag to ensure linked repositories cause a
    rebuild.
 1. After merging and when Docker hub has built a new tag, update your
    `config.yml` to point to it.

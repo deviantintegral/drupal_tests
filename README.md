@@ -38,7 +38,9 @@ If you want to test a whole Drupal site, and not an individual module, see
 See
 [this example repository using Drupal's node module](https://github.com/deviantintegral/drupal_tests_node_example)
 for a live example of how this template is set up, and what sort of reports you
-will see in CircleCI for each job.
+will see in CircleCI for each job. The
+[Elasticsearch Connector](https://github.com/nodespark/elasticsearch_connector)
+module is another good example using this template.
 
 ## Getting started with CircleCI
 

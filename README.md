@@ -38,7 +38,9 @@ If you want to test a whole Drupal site, and not an individual module, see
 See
 [this example repository using Drupal's node module](https://github.com/deviantintegral/drupal_tests_node_example)
 for a live example of how this template is set up, and what sort of reports you
-will see in CircleCI for each job.
+will see in CircleCI for each job. The
+[Elasticsearch Connector](https://github.com/nodespark/elasticsearch_connector)
+module is another good example using this template.
 
 ## Getting started with CircleCI
 
@@ -200,5 +202,9 @@ When a new minor version of Drupal is released:
 1. Test locally with `circleci build --job run-unit-kernel-tests` and so on for
    each job.
 1. Submit a pull request to this repository.
+1. Add a
+   [build configuration](https://hub.docker.com/r/andrewberry/drupal_tests/~/settings/automated-builds/)
+   in Docker Hub with the new tag to ensure linked repositories cause a
+   rebuild.
 1. After merging and when Docker hub has built a new tag, update your
    `config.yml` to point to it.

@@ -5,12 +5,6 @@ RUN apt-get update
 # Install Git and wget.
 RUN apt-get install git wget -y
 
-# This URL is sometimes 403'ing so we pull it into the image.
-# This will be removed in favour of a separate container.
-RUN apt-get install -y bzip2 libfontconfig
-RUN cd '/opt' && curl -L https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar xjvf -
-RUN ln -s /opt/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin
-
 # sudo is used to run tests as www-data.
 RUN apt-get install -y sudo
 RUN apt-get install -y sqlite3

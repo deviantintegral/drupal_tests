@@ -20,7 +20,7 @@ cd elasticsearch_connector
 git checkout 22ac399
 ../setup.sh $1
 
-curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && chmod +x /usr/local/bin/circleci.sh
+sudo curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci.sh
 
 circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-behat-tests
 

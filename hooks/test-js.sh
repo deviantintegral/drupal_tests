@@ -13,7 +13,7 @@ fi
 apache2-foreground&
 
 # Wait for the mariadb container to come up.
-while ! mysqladmin ping -h127.0.0.1; do sleep 1; done
+while ! mysqladmin ping --silent -h127.0.0.1; do sleep 1; done
 
 robo setup:drupal || true
 

@@ -44,16 +44,16 @@ defaults: &defaults
 # We use the composer.json as a way to determine if we can cache our build.
 restore_cache: &restore_cache
   keys:
-  - v1-dependencies-{{ checksum "composer.json" }}
+  - v2-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
   # fallback to using the latest cache if no exact match is found
-  - v1-dependencies-
+  - v2-dependencies-
 
 # If composer.json hasn't changed, restore the vendor directory. We don't
 # restore the lock file so we ensure we get updated dependencies.
 save_cache: &save_cache
   paths:
-    - ./vendor
-  key: v1-dependencies-{{ checksum "composer.json" }}
+    - ../../vendor
+  key: v2-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
 
 # Install composer dependencies into the workspace to share with all jobs.
 update_dependencies: &update_dependencies

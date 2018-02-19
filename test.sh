@@ -4,7 +4,8 @@
 git init test_this_branch
 cd test_this_branch
 composer init -n --name=example/test
-../setup.sh $1
+SETUP=$(../setup.sh $1)
+echo $SETUP | grep "$1"
 circleci config validate
 set +e
 egrep -r '(my_module|MyModule)' * .circleci .gitignore

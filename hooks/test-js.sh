@@ -7,10 +7,6 @@
 # This is the command used by the base image to serve Drupal.
 apache2-foreground&
 
-robo add:behat-deps
-
-robo add:modules $1
-
 robo update:dependencies
 
 robo setup:drupal || true

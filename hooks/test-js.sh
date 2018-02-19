@@ -24,7 +24,11 @@ robo add:modules $1
 
 robo update:dependencies
 
-robo setup:drupal || true
+# Restore and update a previously installed Drupal site.
+mv ../settings.php sites/default/
+vendor/bin/drush sql-create -y
+zcat ../drupal.sql.gz | vendor/bin/drush sqlc
+vendor/bin/drush updatedb -y
 
 chown -R www-data:www-data /var/www/html/sites/default/files
 

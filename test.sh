@@ -36,8 +36,8 @@ set -e
 
 circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
 circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
-BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests)
-echo $BRANCH | grep "1 scenario (1 passed)"
+circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
+grep "1 scenario (1 passed)" behat.log
 
 # Now test using this code to fetch the last tag
 git reset --hard HEAD
@@ -56,7 +56,7 @@ set -e
 
 circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
 circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
-BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests)
-echo $BRANCH | grep "1 scenario (1 passed)"
+circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
+grep "1 scenario (1 passed)" behat.log
 
 echo 'All tests have passed.'

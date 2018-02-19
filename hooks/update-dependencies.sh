@@ -2,9 +2,6 @@
 
 robo setup:skeleton
 robo add:modules $1
-
-robo add:behat-deps
-robo add:coding-standards-deps
 robo update:dependencies
 
 # Touch a flag so we know dependencies have been set. Otherwise, there is no

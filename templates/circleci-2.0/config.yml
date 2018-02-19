@@ -114,8 +114,6 @@ behat_tests: &behat_tests
         command: |
           ./test-js.sh $CIRCLE_PROJECT_REPONAME
 
-    - store_test_results:
-        path: /var/www/html/artifacts/behat
     - store_artifacts:
         path: /var/www/html/artifacts
 

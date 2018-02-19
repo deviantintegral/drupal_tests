@@ -59,7 +59,8 @@ COPY hooks/* /var/www/html/
 
 COPY drupal.sql.gz /var/www
 COPY settings.php /var/www
-RUN mkdir -p /var/www/html/sites/default/files/config_yt3arM1I65-zRJQc52H_nu_xyV-c4YyQ86uwM1E3JBCvD3CXL38O8JqAxqnWWj8rHRiigYrj0w/sync
+RUN mkdir -p /var/www/html/sites/default/files/config_yt3arM1I65-zRJQc52H_nu_xyV-c4YyQ86uwM1E3JBCvD3CXL38O8JqAxqnWWj8rHRiigYrj0w/sync \
+  && chown -Rv www-data /var/www/html/sites/default/files
 
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"

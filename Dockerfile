@@ -35,6 +35,8 @@ RUN docker-php-ext-install bcmath xsl
 
 RUN apt-get install -y mariadb-client
 
+RUN composer global require hirak/prestissimo
+
 COPY hooks/* /var/www/html/
 
 COPY drupal.sql.gz /var/www

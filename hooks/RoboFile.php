@@ -165,12 +165,6 @@ class RoboFile extends \Robo\Tasks
      */
     public function updateDependencies()
     {
-      $this->taskExec('composer')
-        ->arg('global')
-        ->arg('require')
-        ->arg('hirak/prestissimo')
-        ->run();
-
         // The git checkout includes a composer.lock, and running composer update
         // on it fails for the first time.
         $this->taskFilesystemStack()->remove('composer.lock')->run();

@@ -32,8 +32,6 @@ vendor/bin/drush sql-create -y
 zcat ../drupal.sql.gz | vendor/bin/drush sqlc
 vendor/bin/drush updatedb -y
 
-chown -R www-data:www-data /var/www/html/sites/default/files
-
 set +e
 vendor/bin/behat -v -c $(pwd)/modules/$1/tests/src/Behat/behat.yml
 

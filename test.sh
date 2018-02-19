@@ -34,9 +34,9 @@ then
 fi
 set -e
 
-circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer || true
-circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-unit-kernel-tests
-BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-behat-tests)
+circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
+circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
+BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests)
 echo $BRANCH | grep "1 scenario (1 passed)"
 
 # Now test using this code to fetch the last tag
@@ -54,9 +54,9 @@ then
 fi
 set -e
 
-circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer || true
-circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-unit-kernel-tests
-BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-behat-tests)
+circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
+circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
+BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests)
 echo $BRANCH | grep "1 scenario (1 passed)"
 
 echo 'All tests have passed.'

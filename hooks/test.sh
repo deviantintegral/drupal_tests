@@ -16,4 +16,5 @@ apache2-foreground&
 
 robo override:phpunit-config $1
 
+chown -Rv www-data /var/www/html/sites/default/files
 sudo -E -u www-data vendor/bin/phpunit -c core --group $1 --debug --verbose --log-junit artifacts/phpunit/phpunit.xml

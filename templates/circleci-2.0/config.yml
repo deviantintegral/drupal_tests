@@ -178,6 +178,7 @@ workflows:
   # Declare a workflow that runs all of our jobs in parallel.
   test_and_lint:
     jobs:
+      - update-dependencies
       - run-unit-kernel-tests:
           requires:
             - update-dependencies

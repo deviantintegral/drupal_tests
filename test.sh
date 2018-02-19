@@ -13,8 +13,7 @@ then
     exit 1
 fi
 
-php composer-setup.php --quiet
-mv composer.phar /usr/local/bin
+sudo php composer-setup.php --quiet --install-dir=/usr/local/bin
 
 git clone git@github.com:nodespark/elasticsearch_connector.git
 cd elasticsearch_connector

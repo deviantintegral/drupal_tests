@@ -34,8 +34,8 @@ then
 fi
 set -e
 
-# circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer
-circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-unit-kernel-test
+circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer || true
+circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-unit-kernel-tests
 BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-behat-tests)
 echo $BRANCH | grep "1 scenario (1 passed)"
 
@@ -54,8 +54,8 @@ then
 fi
 set -e
 
-# circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer
-circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-unit-kernel-test
+circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer || true
+circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-unit-kernel-tests
 BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-behat-tests)
 echo $BRANCH | grep "1 scenario (1 passed)"
 

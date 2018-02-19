@@ -1,5 +1,11 @@
 #!/bin/bash -ex
 
+git clone git@github.com:nodespark/elasticsearch_connector.git
+cd elasticsearch_connector
+git checkout 22ac399
+../setup.sh $1
+circleci -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-behat-tests
+
 # Test first manually specifying a branch
 git init test_this_branch
 cd test_this_branch

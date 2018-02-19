@@ -2,6 +2,11 @@
 
 # Runs CodeSniffer checks on a Drupal module.
 
+if [ ! -f dependencies_updated ]
+then
+  ./update-dependencies.sh $1
+fi
+
 # Install dependencies and configure phpcs
 vendor/bin/phpcs --config-set installed_paths vendor/drupal/coder/coder_sniffer
 

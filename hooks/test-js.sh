@@ -4,6 +4,11 @@
 #
 # Runs Behat tests.
 
+if [ ! -f dependencies_updated ]
+then
+  ./update-dependencies.sh $1
+fi
+
 # This is the command used by the base image to serve Drupal.
 apache2-foreground&
 

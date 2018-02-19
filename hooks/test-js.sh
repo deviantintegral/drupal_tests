@@ -7,8 +7,6 @@
 # This is the command used by the base image to serve Drupal.
 apache2-foreground&
 
-robo update:dependencies
-
 robo setup:drupal || true
 
 chown -R www-data:www-data /var/www/html/sites/default/files

@@ -17,9 +17,9 @@ sudo php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=comp
 
 sudo curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci.sh
 
-git clone git@github.com:nodespark/elasticsearch_connector.git
-cd elasticsearch_connector
-git checkout 22ac399
+git clone git@github.com:deviantintegral/drupal_tests_node_example.git node
+cd drupal_tests_node_example
+git checkout 118b911
 
 # Test first manually specifying a branch
 ../setup.sh $1
@@ -34,7 +34,7 @@ then
 fi
 set -e
 
-circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer
+# circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer
 circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-unit-kernel-test
 BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-behat-tests)
 echo $BRANCH | grep "1 scenario (1 passed)"
@@ -54,7 +54,7 @@ then
 fi
 set -e
 
-circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer
+# circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-code-sniffer
 circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-unit-kernel-test
 BRANCH=$(circleci.sh -e CIRCLE_PROJECT_REPONAME=elasticsearch_connector build --job run-behat-tests)
 echo $BRANCH | grep "1 scenario (1 passed)"

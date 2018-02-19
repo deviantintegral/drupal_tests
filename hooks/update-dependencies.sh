@@ -3,5 +3,6 @@
 robo setup:skeleton
 robo add:modules $1
 
-robo update:dependencies
 robo add:behat-deps
+robo add:coding-standards-deps
+robo update:dependencies

@@ -168,6 +168,8 @@ class RoboFile extends \Robo\Tasks
         // The git checkout includes a composer.lock, and running composer update
         // on it fails for the first time.
         $this->taskFilesystemStack()->remove('composer.lock')->run();
+
+        $this->taskDeleteDir('vendor/behat/mink')->run();
         $this->taskComposerUpdate()
           ->optimizeAutoloader()
           ->run();

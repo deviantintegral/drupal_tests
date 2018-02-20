@@ -21,9 +21,6 @@ test_ci() {
   circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
   # We need to skip colour codes
   egrep "1 scenario \\(.*1 passed" behat.log
-
-  git reset --hard HEAD
-  git clean -dxf .
 }
 
 sudo apt-get update -y
@@ -47,10 +44,6 @@ git clone git@github.com:deviantintegral/drupal_tests_node_example.git node
 cd node
 git checkout 118b911
 
-# Test first manually specifying a branch
 test_ci $1
-
-# Now test using this code to fetch the last tag
-test_ci
 
 echo 'All tests have passed.'

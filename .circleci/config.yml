@@ -9,13 +9,41 @@ jobs:
 
       - run:
           name: Run tests
+          command: ./test.sh
+
+      - run:
+          name: Move artifacts
+          command: |
+            mkdir artifacts
+            mv node artifacts
+
+      - store_artifacts:
+          path: artifacts
+
+  build_with_branch:
+    machine:
+      image: circleci/classic:201711-01
+
+    steps:
+      - checkout
+
+      - run:
+          name: Run tests
           command: ./test.sh $CIRCLE_BRANCH
 
       - run:
           name: Move artifacts
           command: |
             mkdir artifacts
-            mv test_this_branch test_last_tag artifacts
+            mv node artifacts
 
       - store_artifacts:
           path: artifacts
+
+workflows:
+  version: 2
+  test_both_versions:
+    jobs:
+      # This tests both ./setup.sh and ./setup.sh <branch>
+      -build
+      -build_with_branch

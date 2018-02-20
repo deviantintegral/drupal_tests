@@ -4,14 +4,16 @@
 #
 # Runs Behat tests.
 
+if [ ! -f dependencies_updated ]
+then
+  ./update-dependencies.sh $1
+fi
+
 # This is the command used by the base image to serve Drupal.
 apache2-foreground&
 
-robo add:behat-deps
-
-robo add:modules $1
-
-robo update:dependencies
+# Wait for the mariadb container to come up.
+while ! mysqladmin ping --silent -h127.0.0.1; do sleep 1; done
 
 robo setup:drupal || true
 

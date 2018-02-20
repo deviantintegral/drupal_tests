@@ -44,26 +44,46 @@ defaults: &defaults
 # We use the composer.json as a way to determine if we can cache our build.
 restore_cache: &restore_cache
   keys:
-  - v1-dependencies-{{ checksum "composer.json" }}
+  - v3-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
   # fallback to using the latest cache if no exact match is found
-  - v1-dependencies-
+  - v3-dependencies-
 
 # If composer.json hasn't changed, restore the vendor directory. We don't
 # restore the lock file so we ensure we get updated dependencies.
 save_cache: &save_cache
   paths:
-    - ./vendor
-  key: v1-dependencies-{{ checksum "composer.json" }}
+    - ../../vendor
+  key: v3-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
+
+# Install composer dependencies into the workspace to share with all jobs.
+update_dependencies: &update_dependencies
+  <<: *defaults
+  steps:
+    - checkout
+
+    - restore_cache: *restore_cache
+
+    - run:
+        working_directory: /var/www/html
+        command: |
+          ./update-dependencies.sh $CIRCLE_PROJECT_REPONAME
+
+    - save_cache: *save_cache
+
+    - persist_to_workspace:
+        root: /var/www/html
+        paths:
+          - .
 
 # Run Drupal unit and kernel tests as one job. This command invokes the test.sh
 # hook.
 unit_kernel_tests: &unit_kernel_tests
   <<: *defaults
   steps:
-    - checkout
+    - attach_workspace:
+        at: /var/www/html
 
-    - restore_cache: *restore_cache
-    - save_cache: *save_cache
+    - checkout
 
     - run:
         working_directory: /var/www/html
@@ -79,10 +99,10 @@ unit_kernel_tests: &unit_kernel_tests
 behat_tests: &behat_tests
   <<: *defaults
   steps:
-    - checkout
+    - attach_workspace:
+        at: /var/www/html
 
-    - restore_cache: *restore_cache
-    - save_cache: *save_cache
+    - checkout
 
     - run:
         working_directory: /var/www/html
@@ -98,10 +118,10 @@ behat_tests: &behat_tests
 code_sniffer: &code_sniffer
   <<: *defaults
   steps:
-    - checkout
+    - attach_workspace:
+        at: /var/www/html
 
-    - restore_cache: *restore_cache
-    - save_cache: *save_cache
+    - checkout
 
     - run:
         working_directory: /var/www/html
@@ -117,10 +137,10 @@ code_sniffer: &code_sniffer
 code_coverage: &code_coverage
   <<: *defaults
   steps:
-    - checkout
+    - attach_workspace:
+        at: /var/www/html
 
-    - restore_cache: *restore_cache
-    - save_cache: *save_cache
+    - checkout
 
     - run:
         working_directory: /var/www/html
@@ -132,6 +152,8 @@ code_coverage: &code_coverage
 # Declare all of the jobs we should run.
 version: 2
 jobs:
+  update-dependencies:
+     <<: *update_dependencies
   run-unit-kernel-tests:
      <<: *unit_kernel_tests
   run-behat-tests:
@@ -147,9 +169,17 @@ workflows:
   # Declare a workflow that runs all of our jobs in parallel.
   test_and_lint:
     jobs:
-      - run-unit-kernel-tests
-      - run-behat-tests
-      - run-code-sniffer
+      - update-dependencies
+      - run-unit-kernel-tests:
+          requires:
+            - update-dependencies
+      - run-behat-tests:
+          requires:
+            - update-dependencies
+      - run-code-sniffer:
+          requires:
+            - update-dependencies
       - run-code-coverage:
           requires:
+            - update-dependencies
             - run-unit-kernel-tests

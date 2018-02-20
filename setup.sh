@@ -69,4 +69,4 @@ drupal_tests_install() {
   echo 'Setup complete. You are now ready to test with CircleCI!'
 }
 
-drupal_tests_install
+drupal_tests_install $1

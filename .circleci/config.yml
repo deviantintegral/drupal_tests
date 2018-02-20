@@ -27,6 +27,9 @@ jobs:
     machine:
       image: circleci/classic:201711-01
 
+    environment:
+      - CI_SYSTEM: circleci
+
     steps:
       - checkout
 

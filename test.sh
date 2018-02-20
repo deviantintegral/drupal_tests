@@ -14,13 +14,14 @@ test_ci() {
   fi
   set -e
 
-  # This module fails CS jobs currently so this is more informational.
-  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
   circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
 
   circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
   # We need to skip colour codes
   egrep "1 scenario \\(.*1 passed" behat.log
+
+  # This module fails CS jobs currently so this is more informational.
+  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
 }
 
 sudo apt-get update -y

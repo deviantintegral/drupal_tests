@@ -45,7 +45,7 @@ sudo curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.co
 
 # Docker Hub can take 20 minutes to build and sometimes fails. Instead, we
 # test against a locally built copy of the image when building this branch.
-if [ -z $1 ]
+if [ ! -z $1 ]
 then
   docker build -t $CI_SYSTEM-build .
 fi

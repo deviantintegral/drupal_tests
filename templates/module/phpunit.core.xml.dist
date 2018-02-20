@@ -70,6 +70,6 @@
         <directory>../modules/my_module/tests</directory>
         <directory>../modules/my_module/test_modules</directory>
       </exclude>
-     </whitelist>
+    </whitelist>
   </filter>
 </phpunit>

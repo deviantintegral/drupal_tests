@@ -9,7 +9,7 @@ then
   ./update-dependencies.sh $1
 fi
 
-# This is the command used by the base image to serve Drupal. We redirect lgos
+# This is the command used by the base image to serve Drupal. We redirect logs
 # from stdout so they aren't intermingled with Behat's test output. The proper
 # docker method for this would be to run Behat in a separate container, but
 # this is tricky with Circle's docker executor.

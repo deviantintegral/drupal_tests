@@ -145,7 +145,7 @@ code_coverage: &code_coverage
     - run:
         working_directory: /var/www/html
         command: |
-          ./code-coverage-stats.sh node
+          ./code-coverage-stats.sh $CIRCLE_PROJECT_REPONAME
     - store_artifacts:
         path: /var/www/html/artifacts
 

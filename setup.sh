@@ -62,6 +62,7 @@ drupal_tests_install() {
     echo 'tests/src/Behat/behat.local.yml' >> .gitignore
   fi
 
+  # If this is updated remember to update the Dockerfile too.
   composer require --dev --no-update \
       cweagans/composer-patches \
       behat/mink-selenium2-driver \

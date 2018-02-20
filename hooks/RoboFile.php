@@ -26,13 +26,6 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * The database URL.
-     *
-     * This must be 127.0.0.1 so it can work over a TCP socket.
-     */
-    const DB_URL = 'mysql://root@127.0.0.1/drupal8';
-
-    /**
      * Files which we don't want to copy into the module directory.
      */
     static $excludeFiles = [
@@ -172,15 +165,11 @@ class RoboFile extends \Robo\Tasks
      */
     public function updateDependencies()
     {
-      $this->taskExec('composer')
-        ->arg('global')
-        ->arg('require')
-        ->arg('hirak/prestissimo')
-        ->run();
-
         // The git checkout includes a composer.lock, and running composer update
         // on it fails for the first time.
         $this->taskFilesystemStack()->remove('composer.lock')->run();
+
+        $this->taskDeleteDir('vendor/behat/mink')->run();
         $this->taskComposerUpdate()
           ->optimizeAutoloader()
           ->run();
@@ -213,33 +202,30 @@ class RoboFile extends \Robo\Tasks
     /**
      * Install Drupal.
      *
-     * @param string $admin_user
-     *   (optional) The administrator's username.
-     * @param string $admin_password
-     *   (optional) The administrator's password.
-     * @param string $site_name
-     *   (optional) The Drupal site name.
+     * @param array $opts
+     *   (optional) The array of options.
      */
-    public function setupDrupal(
-      $admin_user = null,
-      $admin_password = null,
-      $site_name = null
+    public function setupDrupal($opts = [
+      'admin-user' => null,
+      'admin-password' => null,
+      'site-name' => null,
+      'db-url' => 'mysql://root@127.0.0.1/drupal8',
+      ]
     ) {
-        $db_url = static::DB_URL;
         $task = $this->drush()
           ->args('site-install')
           ->option('yes')
-          ->option('db-url', $db_url, '=');
+          ->option('db-url', $opts['db-url'], '=');
 
-        if ($admin_user) {
+        if ($opts['admin-user']) {
             $task->option('account-name', $admin_user, '=');
         }
 
-        if ($admin_password) {
+        if ($opts['admin-password']) {
             $task->option('account-pass', $admin_password, '=');
         }
 
-        if ($site_name) {
+        if ($opts['site-name']) {
             $task->option('site-name', $site_name, '=');
         }
 

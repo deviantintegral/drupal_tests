@@ -1,15 +1,9 @@
-FROM drupal:8.4-apache
+FROM drupal:8.5-rc-apache
 
 RUN apt-get update
 
 # Install Git and wget.
 RUN apt-get install git wget -y
-
-# This URL is sometimes 403'ing so we pull it into the image.
-# This will be removed in favour of a separate container.
-RUN apt-get install -y bzip2 libfontconfig
-RUN cd '/opt' && curl -L https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar xjvf -
-RUN ln -s /opt/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin
 
 # sudo is used to run tests as www-data.
 RUN apt-get install -y sudo
@@ -19,12 +13,12 @@ RUN apt-get install -y fontconfig
 
 # xdebug isn't available as a prebuilt extension in the parent image.
 RUN pecl install xdebug
-RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini
+RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini
 
 # We use imagemagick to support behat screenshots
 RUN apt-get install -y imagemagick libmagickwand-dev
 RUN pecl install imagick
-RUN echo 'extension=/usr/local/lib/php/extensions/no-debug-non-zts-20160303/imagick.so' > /usr/local/etc/php/conf.d/imagick.ini
+RUN echo 'extension=/usr/local/lib/php/extensions/no-debug-non-zts-20170718/imagick.so' > /usr/local/etc/php/conf.d/imagick.ini
 
 # Install composer.
 COPY install-composer.sh /usr/local/bin/
@@ -32,7 +26,7 @@ RUN install-composer.sh
 
 # Install Robo CI.
 # @TODO replace the following URL by http://robo.li/robo.phar when the Robo team fixes it.
-RUN wget https://github.com/consolidation/Robo/releases/download/1.1.5/robo.phar
+RUN wget https://github.com/consolidation/Robo/releases/download/1.2.1/robo.phar
 RUN chmod +x robo.phar && mv robo.phar /usr/local/bin/robo
 
 # php-dom and bcmath dependencies
@@ -41,7 +35,32 @@ RUN docker-php-ext-install bcmath xsl
 
 RUN apt-get install -y mariadb-client
 
+RUN composer global require hirak/prestissimo
+
+# Cache currently used libraries to improve build times. We need to force
+# discarding changes as Drupal removes test code in /vendor.
+RUN cd /var/www/html \
+  && cp composer.json composer.json.original \
+  && cp composer.lock composer.lock.original \
+  && composer require --dev \
+      cweagans/composer-patches \
+      behat/mink-selenium2-driver \
+      behat/mink-extension:v2.2 \
+      drupal/coder \
+      drupal/drupal-extension:master-dev \
+      bex/behat-screenshot \
+      phpmd/phpmd \
+      phpmetrics/phpmetrics \
+  && mv composer.json.original composer.json \
+  && mv composer.lock.original composer.lock \
+  && COMPOSER_DISCARD_CHANGES=1 composer install
+
 COPY hooks/* /var/www/html/
+
+COPY drupal.sql.gz /var/www
+COPY settings.php /var/www
+RUN mkdir -p /var/www/html/sites/default/files/config_yt3arM1I65-zRJQc52H_nu_xyV-c4YyQ86uwM1E3JBCvD3CXL38O8JqAxqnWWj8rHRiigYrj0w/sync \
+  && chown -Rv www-data /var/www/html/sites/default/files
 
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"

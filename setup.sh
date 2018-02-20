@@ -31,7 +31,7 @@ drupal_tests_install() {
     DOCKER_TAG=$CI_SYSTEM-build
   fi
 
-  echo "Using $TAG as the config version version."
+  echo "Using $TAG as the config version."
   echo "Using $DOCKER_TAG as the container version."
 
   # Download the CircleCI configuration.

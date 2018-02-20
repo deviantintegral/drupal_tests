@@ -19,8 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Drupal 8.5 is now used for tests [#24](https://github.com/deviantintegral/drupal_tests/pull/24)
 * The container has been upgraded to PHP 7.2, which means PHPUnit 6 is now
   required.
-* Phantom JS has now been removed. Use a container link instead. [#15](https://github.com/deviantintegral/drupal_tests/issues/15)
-* HTTP logs are split form Behat logs [#23](https://github.com/deviantintegral/drupal_tests/issues/23)
+* Phantom JS has now been removed. Use a container link instead. [#15](https://github.com/deviantintegral/drupal_tests/issues/15).
+* HTTP logs are split form Behat logs.
+* The Robo setup:drupal command now takes options instead of arguments.
 
 ### Fixed
 

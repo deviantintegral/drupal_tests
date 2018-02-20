@@ -43,7 +43,12 @@ sudo php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=comp
 # missing files when running builds.
 sudo curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci.sh
 
-docker build -t $CI_SYSTEM-build .
+# Docker Hub can take 20 minutes to build and sometimes fails. Instead, we
+# test against a locally built copy of the image when building this branch.
+if [ -z $1 ]
+then
+  docker build -t $CI_SYSTEM-build .
+fi
 
 git clone git@github.com:deviantintegral/drupal_tests_node_example.git node
 cd node

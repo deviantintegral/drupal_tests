@@ -26,7 +26,7 @@ drupal_tests_install() {
   fi
 
   DOCKER_TAG="andrewberry/drupal_tests:$TAG"
-  if [ ! -z $CI_SYSTEM ]
+  if [ -z $1 && ! -z $CI_SYSTEM ]
   then
     DOCKER_TAG=$CI_SYSTEM-build
   fi

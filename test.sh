@@ -1,5 +1,31 @@
 #!/bin/bash -ex
 
+test_ci() {
+  ../setup.sh $1
+
+  circleci config validate
+  set +e
+  egrep -r '(my_module|MyModule)' * .circleci .gitignore
+  CHECK=$?
+  if [ $CHECK -eq 0 ]
+  then
+    set -e
+    exit 1
+  fi
+  set -e
+
+  # This module fails CS jobs currently so this is more informational.
+  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
+  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
+
+  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
+  # We need to skip colour codes
+  egrep "1 scenario \\(.*1 passed" behat.log
+
+  git reset --hard HEAD
+  git clean -dxf .
+}
+
 sudo apt-get update -y
 sudo apt-get install php5-cli -y
 EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig)
@@ -22,45 +48,9 @@ cd node
 git checkout 118b911
 
 # Test first manually specifying a branch
-../setup.sh $1
-
-circleci config validate
-set +e
-egrep -r '(my_module|MyModule)' * .circleci .gitignore
-CHECK=$?
-if [ $CHECK -eq 0 ]
-then
-  exit 1
-fi
-set -e
-
-circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
-circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
-
-circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
-# We need to skip colour codes
-egrep "1 scenario \\(.*1 passed" behat.log
+test_ci $1
 
 # Now test using this code to fetch the last tag
-git reset --hard HEAD
-git clean -dxf .
-../setup.sh
-
-circleci config validate
-set +e
-egrep -r '(my_module|MyModule)' * .circleci .gitignore
-CHECK=$?
-if [ $CHECK -eq 0 ]
-then
-  exit 1
-fi
-set -e
-
-circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
-circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
-
-circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
-# We need to skip colour codes
-egrep "1 scenario \\(.*1 passed" behat.log
+test_ci
 
 echo 'All tests have passed.'

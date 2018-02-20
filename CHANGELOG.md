@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* A single job is now used to initialize composer, and it's results are used to
+  seed all of the individual test jobs.
+  [#26](https://github.com/deviantintegral/drupal_tests/pull/26/files)
 * A `drupal.sql.gz` and `settings.php` file are included with a pre-installed
   Drupal database. See the Behat test script for how it's imported and used.
 

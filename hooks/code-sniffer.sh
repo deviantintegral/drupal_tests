@@ -2,13 +2,10 @@
 
 # Runs CodeSniffer checks on a Drupal module.
 
-robo setup:skeleton
-
-robo add:coding-standards-deps
-
-robo add:modules $1
-
-robo update:dependencies
+if [ ! -f dependencies_updated ]
+then
+  ./update-dependencies.sh $1
+fi
 
 # Install dependencies and configure phpcs
 vendor/bin/phpcs --config-set installed_paths vendor/drupal/coder/coder_sniffer

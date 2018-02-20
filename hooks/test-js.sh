@@ -4,6 +4,11 @@
 #
 # Runs Behat tests.
 
+if [ ! -f dependencies_updated ]
+then
+  ./update-dependencies.sh $1
+fi
+
 # This is the command used by the base image to serve Drupal. We redirect lgos
 # from stdout so they aren't intermingled with Behat's test output. The proper
 # docker method for this would be to run Behat in a separate container, but
@@ -18,11 +23,8 @@ mkdir -p artifacts/logs
 ln -v /var/log/apache2/*log artifacts/logs
 apachectl start
 
-robo add:behat-deps
-
-robo add:modules $1
-
-robo update:dependencies
+# Wait for the mariadb container to come up.
+while ! mysqladmin ping --silent -h127.0.0.1; do sleep 1; done
 
 # Restore and update a previously installed Drupal site.
 mv ../settings.php sites/default/

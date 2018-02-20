@@ -25,14 +25,21 @@ drupal_tests_install() {
     TAG=$1
   fi
 
-  echo "Using $TAG as the container version."
+  DOCKER_TAG="andrewberry\/drupal_tests:$TAG"
+  if [ ! -z "$1" ] && [ ! -z "$CI_SYSTEM" ]
+  then
+    DOCKER_TAG=$CI_SYSTEM-build
+  fi
+
+  echo "Using $TAG as the config version."
+  echo "Using $DOCKER_TAG as the container version."
 
   # Download the CircleCI configuration.
   mkdir -p .circleci
   curl -s -L https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/circleci-2.0/config.yml > .circleci/config.yml
 
   # Update the container version in the config file.
-  perl -i -pe "s/andrewberry\/drupal_tests:latest/andrewberry\/drupal_tests:$TAG/g" .circleci/config.yml
+  perl -i -pe "s/andrewberry\/drupal_tests:latest/$DOCKER_TAG/g" .circleci/config.yml
   perl -i -pe "s/my_module/$MODULE/g" .circleci/config.yml
 
   # Set up phpunit with code coverage for this module.
@@ -69,4 +76,4 @@ drupal_tests_install() {
   echo 'Setup complete. You are now ready to test with CircleCI!'
 }
 
-drupal_tests_install
+drupal_tests_install $1

@@ -1,7 +1,8 @@
 #!/bin/bash -ex
 
 test_ci() {
-  ../setup.sh $1
+  ../setup.sh $1 | tee setup.log
+  grep "$1" setup.log
 
   circleci config validate
   set +e
@@ -14,14 +15,13 @@ test_ci() {
   fi
   set -e
 
+  # This module fails CS jobs currently so this is more informational.
+  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
   circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
 
   circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
   # We need to skip colour codes
   egrep "1 scenario \\(.*1 passed" behat.log
-
-  # This module fails CS jobs currently so this is more informational.
-  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
 }
 
 sudo apt-get update -y
@@ -39,7 +39,16 @@ fi
 
 sudo php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
 
+# There is a circleci CLI tool in the machine image, but it throws errors about
+# missing files when running builds.
 sudo curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci.sh
+
+# Docker Hub can take 20 minutes to build and sometimes fails. Instead, we
+# test against a locally built copy of the image when building this branch.
+if [ ! -z $1 ]
+then
+  docker build -t $CI_SYSTEM-build .
+fi
 
 git clone git@github.com:deviantintegral/drupal_tests_node_example.git node
 cd node

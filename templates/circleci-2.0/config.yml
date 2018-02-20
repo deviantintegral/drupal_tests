@@ -62,12 +62,13 @@ update_dependencies: &update_dependencies
     - checkout
 
     - restore_cache: *restore_cache
-    - save_cache: *save_cache
 
     - run:
         working_directory: /var/www/html
         command: |
           ./update-dependencies.sh $CIRCLE_PROJECT_REPONAME
+
+    - save_cache: *save_cache
 
     - persist_to_workspace:
         root: /var/www/html
@@ -83,9 +84,6 @@ unit_kernel_tests: &unit_kernel_tests
         at: /var/www/html
 
     - checkout
-
-    - restore_cache: *restore_cache
-    - save_cache: *save_cache
 
     - run:
         working_directory: /var/www/html
@@ -106,9 +104,6 @@ behat_tests: &behat_tests
 
     - checkout
 
-    - restore_cache: *restore_cache
-    - save_cache: *save_cache
-
     - run:
         working_directory: /var/www/html
         command: |
@@ -128,9 +123,6 @@ code_sniffer: &code_sniffer
 
     - checkout
 
-    - restore_cache: *restore_cache
-    - save_cache: *save_cache
-
     - run:
         working_directory: /var/www/html
         command: |
@@ -149,9 +141,6 @@ code_coverage: &code_coverage
         at: /var/www/html
 
     - checkout
-
-    - restore_cache: *restore_cache
-    - save_cache: *save_cache
 
     - run:
         working_directory: /var/www/html

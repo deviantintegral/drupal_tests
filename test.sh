@@ -43,6 +43,8 @@ sudo php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=comp
 # missing files when running builds.
 sudo curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci.sh
 
+docker build -t $CI_SYSTEM-build .
+
 git clone git@github.com:deviantintegral/drupal_tests_node_example.git node
 cd node
 git checkout 118b911

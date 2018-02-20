@@ -4,6 +4,9 @@ jobs:
     machine:
       image: circleci/classic:201711-01
 
+    environment:
+      - CI_SYSTEM: circleci
+
     steps:
       - checkout
 
@@ -23,6 +26,9 @@ jobs:
   build_with_branch:
     machine:
       image: circleci/classic:201711-01
+
+    environment:
+      - CI_SYSTEM: circleci
 
     steps:
       - checkout

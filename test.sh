@@ -36,7 +36,9 @@ set -e
 
 circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
 circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
-circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
+
+# cat is an easy way to strip out ANSI colours we we need for the grep.
+circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | cat | tee behat.log
 grep "1 scenario (1 passed)" behat.log
 
 # Now test using this code to fetch the last tag
@@ -56,7 +58,9 @@ set -e
 
 circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
 circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
-circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
+
+# cat is an easy way to strip out ANSI colours we we need for the grep.
+circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | cat | tee behat.log
 grep "1 scenario (1 passed)" behat.log
 
 echo 'All tests have passed.'

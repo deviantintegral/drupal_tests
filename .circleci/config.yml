@@ -45,5 +45,5 @@ workflows:
   test_both_versions:
     jobs:
       # This tests both ./setup.sh and ./setup.sh <branch>
-      -build
-      -build_with_branch
+      - build
+      - build_with_branch

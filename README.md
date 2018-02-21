@@ -168,7 +168,7 @@ Be sure to review for any customizations you may want to preserve. For example:
 
 ```sh
 $ git checkout -b update-circleci
-$ curl -L https://github.com/deviantintegral/drupal_tests/raw/master/setup.sh | bash
+$ bash -c "$(curl -fsSL https://github.com/deviantintegral/drupal_tests/raw/master/setup.sh)"
 $ git add -p # Add all changes you want to make.
 $ git checkout -p # Remove any changes you don't want to make.
 $ git status # Check for any newly added files.

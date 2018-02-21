@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+* `setup.sh` now allows `master` to be used, properly mapping it to the
+  `latest` Docker container build.
+
 ## [0.2.0] - 2018-01-09
 
 ### Added

@@ -1,6 +1,7 @@
 # Drupal Testing Container
 
-A Docker container and template for testing individual Drupal modules with:
+A [Docker container](https://hub.docker.com/r/andrewberry/drupal_tests/) and
+template for testing individual Drupal modules with:
 
 * Unit and Kernel tests
 * Behat tests

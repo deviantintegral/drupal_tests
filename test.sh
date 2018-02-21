@@ -22,6 +22,16 @@ test_ci() {
   circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
   # We need to skip colour codes
   egrep "1 scenario \\(.*1 passed" behat.log
+
+  set +e
+  git apply ../behat-fail.patch
+  if [ ! circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log ]
+  then
+    set -e
+    exit 1
+  fi
+  set -e
+  git revert --hard HEAD
 }
 
 sudo apt-get update -y

@@ -1,0 +1,13 @@
+diff --git a/tests/src/Behat/features/bootstrap/NodeFeatureContext.php b/tests/src/Behat/features/bootstrap/NodeFeatureContext.php
+index a02a635..2610535 100644
+--- a/tests/src/Behat/features/bootstrap/NodeFeatureContext.php
++++ b/tests/src/Behat/features/bootstrap/NodeFeatureContext.php
+@@ -18,6 +18,8 @@ class NodeFeatureContext extends RawDrupalContext implements SnippetAcceptingCon
+    * @BeforeSuite
+    */
+   public static function prepare(BeforeSuiteScope $scope) {
++    $a = new \stdClass();
++    $a->doesNotExist();
+     /** @var \Drupal\Core\Extension\ModuleHandler $moduleHandler */
+     $moduleHandler = \Drupal::service('module_handler');
+     if (!$moduleHandler->moduleExists('node')) {

@@ -29,6 +29,9 @@ drupal_tests_install() {
   if [ ! -z "$1" ] && [ ! -z "$CI_SYSTEM" ]
   then
     DOCKER_TAG=$CI_SYSTEM-build
+  elif [ "$1" == "master" ]
+  then
+    DOCKER_TAG="andrewberry\/drupal_tests:latest"
   fi
 
   echo "Using $TAG as the config version."

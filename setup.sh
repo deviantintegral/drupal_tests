@@ -67,7 +67,7 @@ drupal_tests_install() {
 
   # If this is updated remember to update the Dockerfile too.
   composer require --dev --no-update \
-      cweagans/composer-patches \
+      cweagans/composer-patches:~1.0 \
       behat/mink-selenium2-driver \
       behat/mink-extension:v2.2 \
       drupal/coder \

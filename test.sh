@@ -30,7 +30,7 @@ test_ci() {
   circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
   grep -A9 'Behat tests failed' behat.log | tail -n 1 | grep '+ exit 1'
 
-  git revert --hard HEAD
+  git reset --hard HEAD
 }
 
 sudo apt-get update -y

@@ -23,14 +23,9 @@ test_ci() {
   # We need to skip colour codes
   egrep "1 scenario \\(.*1 passed" behat.log
 
-  set +e
-  git apply ../behat-fail.patch
-  if [ ! circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log ]
-  then
-    set -e
-    exit 1
-  fi
-  set -e
+  # Test that a PHP FATAL error properly fails the job.
+  git apply ../fixtures/behat-fail.patch
+  ! (circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log) || exit 1
   git revert --hard HEAD
 }
 

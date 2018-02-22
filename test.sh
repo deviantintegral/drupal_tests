@@ -25,7 +25,9 @@ test_ci() {
 
   # Test that a PHP FATAL error properly fails the job.
   git apply ../fixtures/behat-fail.patch
+  set +e
   ! (circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log) || exit 1
+  set -e
   git revert --hard HEAD
 }
 

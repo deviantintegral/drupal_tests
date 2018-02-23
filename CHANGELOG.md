@@ -4,13 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - YYYY-MM-DD
+## [0.3.1] - 2018-02-23
 
 ### Fixed
 
 * Certain types of PHP errors did not throw a failed exit code in Behat tests.
   [_drupal_log_error() returns a 0 exit code on errors](https://www.drupal.org/project/drupal/issues/2927012)
   has been applied to Drupal core until it's fixed upstream. [#33](https://github.com/deviantintegral/drupal_tests/pull/33)
+* Fix version conflict with root composer-patches requirement [#34](https://github.com/deviantintegral/drupal_tests/pull/34)
 
 ## [0.3.0] - 2018-02-21
 

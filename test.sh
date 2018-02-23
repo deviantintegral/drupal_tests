@@ -16,12 +16,24 @@ test_ci() {
   set -e
 
   # This module fails CS jobs currently so this is more informational.
-  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
-  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
+  if [ ! -z $1 ]
+  then
+    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
+    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
 
-  circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
-  # We need to skip colour codes
-  egrep "1 scenario \\(.*1 passed" behat.log
+    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
+    # We need to skip colour codes
+    egrep "1 scenario \\(.*1 passed" behat.log
+
+    # Test that a PHP FATAL error properly fails the job.
+    git apply ../fixtures/behat-fail.patch
+
+    # circleci doesn't bubble the exit code from behat :(
+    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
+    grep -A9 'Behat tests failed' behat.log | tail -n 1 | grep '+ exit 1'
+
+    git reset --hard HEAD
+  fi
 }
 
 sudo apt-get update -y

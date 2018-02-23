@@ -45,7 +45,6 @@ class RoboFile extends \Robo\Tasks
         // composer config doesn't allow us to set arrays, so we have to do this by
         // hand.
         $config = json_decode(file_get_contents('composer.json'));
-        $config->require->{"cweagans/composer-patches"} = "~1.0";
         $config->require->{"drush/drush"} = "~9.0";
         $config->extra->{"enable-patching"} = 'true';
         $config->extra->{"patches"} = new \stdClass();

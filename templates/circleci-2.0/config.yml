@@ -48,8 +48,8 @@ restore_cache: &restore_cache
   # fallback to using the latest cache if no exact match is found
   - v3-dependencies-
 
-# If composer.json hasn't changed, restore the vendor directory. We don't
-# restore the lock file so we ensure we get updated dependencies.
+# If composer.json hasn't changed, restore the Composer cache directory. We
+# don't restore the lock file so we ensure we get updated dependencies.
 save_cache: &save_cache
   paths:
     - /root/.composer/cache/files

@@ -52,7 +52,7 @@ restore_cache: &restore_cache
 # restore the lock file so we ensure we get updated dependencies.
 save_cache: &save_cache
   paths:
-    - ../../vendor
+    - /root/.composer/cache/files
   key: v3-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
 
 # Install composer dependencies into the workspace to share with all jobs.

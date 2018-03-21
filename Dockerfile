@@ -1,4 +1,4 @@
-FROM drupal:8.5-rc-apache
+FROM drupal:8.5-apache
 
 RUN apt-get update
 
@@ -26,7 +26,7 @@ RUN install-composer.sh
 
 # Install Robo CI.
 # @TODO replace the following URL by http://robo.li/robo.phar when the Robo team fixes it.
-RUN wget https://github.com/consolidation/Robo/releases/download/1.2.1/robo.phar
+RUN wget https://github.com/consolidation/Robo/releases/download/1.2.2/robo.phar
 RUN chmod +x robo.phar && mv robo.phar /usr/local/bin/robo
 
 # php-dom and bcmath dependencies

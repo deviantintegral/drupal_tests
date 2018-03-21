@@ -1,4 +1,4 @@
-FROM drupal:8.5-rc-apache
+FROM drupal:8.5-apache
 
 RUN apt-get update
 

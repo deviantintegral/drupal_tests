@@ -25,7 +25,6 @@ COPY install-composer.sh /usr/local/bin/
 RUN install-composer.sh
 
 # Install Robo CI.
-# @TODO replace the following URL by http://robo.li/robo.phar when the Robo team fixes it.
 RUN wget https://robo.li/robo.phar
 RUN chmod +x robo.phar && mv robo.phar /usr/local/bin/robo
 

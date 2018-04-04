@@ -18,11 +18,13 @@ test_ci() {
   # This module fails CS jobs currently so this is more informational.
   if [ ! -z $1 ]
   then
-    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer || true
+    (circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer | tee code-sniffer.log) || true
+    # We need to skip colour codes
+    egrep "Applying patches for .*drupal/coder" code-sniffer.log
+
     circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
 
     circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
-    # We need to skip colour codes
     egrep "1 scenario \\(.*1 passed" behat.log
 
     # Test that a PHP FATAL error properly fails the job.

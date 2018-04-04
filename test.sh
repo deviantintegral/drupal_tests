@@ -64,7 +64,7 @@ fi
 
 git clone git@github.com:deviantintegral/drupal_tests_node_example.git node
 cd node
-git checkout 118b911
+git checkout f1fe4f14840db1f904bf0d41e2d22c0c0b72ef6d
 
 test_ci $1
 

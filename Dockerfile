@@ -41,18 +41,20 @@ RUN composer global require hirak/prestissimo
 RUN cd /var/www/html \
   && cp composer.json composer.json.original \
   && cp composer.lock composer.lock.original \
+  && mv vendor vendor.original \
   && composer require --dev \
       cweagans/composer-patches \
-      behat/mink-selenium2-driver \
+      behat/mink-selenium2-driver:1.3.x-dev \
       behat/mink-extension:v2.2 \
       drupal/coder \
       drupal/drupal-extension:master-dev \
       bex/behat-screenshot \
       phpmd/phpmd \
       phpmetrics/phpmetrics \
+  && rm -rf vendor \
   && mv composer.json.original composer.json \
   && mv composer.lock.original composer.lock \
-  && COMPOSER_DISCARD_CHANGES=1 composer install
+  && mv vendor.original vendor
 
 COPY hooks/* /var/www/html/
 

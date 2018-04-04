@@ -19,7 +19,7 @@ test_ci() {
   if [ ! -z $1 ]
   then
     (circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-code-sniffer | tee code-sniffer.log) || true
-    egrep "Applying patches for drupal\/coder" code-sniffer.log
+    egrep "Applying patches for drupal/coder" code-sniffer.log
 
     circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
 

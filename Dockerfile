@@ -44,7 +44,7 @@ RUN cd /var/www/html \
   && mv vendor vendor.original \
   && composer require --dev \
       cweagans/composer-patches \
-      behat/mink-selenium2-driver \
+      behat/mink-selenium2-driver:1.3.x-dev \
       behat/mink-extension:v2.2 \
       drupal/coder \
       drupal/drupal-extension:master-dev \

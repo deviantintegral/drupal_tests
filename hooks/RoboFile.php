@@ -190,12 +190,24 @@ class RoboFile extends \Robo\Tasks
      */
     protected function getPatches($module)
     {
-        $path = 'modules/' . $module . '/patches.json';
+      // Load composer configuration for the given module.
+      $config = json_decode(file_get_contents('modules/' . $module . '/composer.json'));
+
+      // If the module defines patches in composer.json, simply use them.
+      if (!empty($config->extra->{"patches"})) {
+        return $config->extra->{"patches"};
+      }
+
+      // If the module defines an external composer patches file, use it.
+      if ($config->extra->{"patches-file"}) {
+        $path = 'modules/' . $module . '/' . $config->extra->{"patches-file"};
         if (file_exists($path)) {
-            return json_decode(file_get_contents($path));
-        } else {
-            return new stdClass();
+          $patch_file_contents = json_decode(file_get_contents($path));
+          return $patch_file_contents->{"patches"};
         }
+      }
+
+      return new stdClass();
     }
 
     /**

@@ -199,7 +199,7 @@ class RoboFile extends \Robo\Tasks
       }
 
       // If the module defines an external composer patches file, use it.
-      if ($config->extra->{"patches-file"}) {
+      if (!empty($config->extra->{"patches-file"})) {
         $path = 'modules/' . $module . '/' . $config->extra->{"patches-file"};
         if (file_exists($path)) {
           $patch_file_contents = json_decode(file_get_contents($path));

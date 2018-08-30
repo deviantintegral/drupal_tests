@@ -198,13 +198,19 @@ class RoboFile extends \Robo\Tasks
         return $config->extra->{"patches"};
       }
 
+      // Use the old patch file standard in drupal_tests, which was independent
+      // from any module composer.json patch specifications.
+      $patches_file = 'patches.json';
+
       // If the module defines an external composer patches file, use it.
       if (!empty($config->extra->{"patches-file"})) {
-        $path = 'modules/' . $module . '/' . $config->extra->{"patches-file"};
-        if (file_exists($path)) {
-          $patch_file_contents = json_decode(file_get_contents($path));
-          return $patch_file_contents->{"patches"};
-        }
+        $patches_file = $config->extra->{"patches-file"};
+      }
+
+      $path = 'modules/' . $module . '/' . $patches_file;
+      if (file_exists($path)) {
+        $patch_file_contents = json_decode(file_get_contents($path));
+        return $patch_file_contents->{"patches"};
       }
 
       return new stdClass();

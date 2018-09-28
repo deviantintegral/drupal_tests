@@ -46,7 +46,7 @@ RUN cd /var/www/html \
       cweagans/composer-patches \
       behat/mink-selenium2-driver:1.3.x-dev \
       behat/mink-extension:v2.2 \
-      drupal/coder \
+      drupal/coder:8.2.* \
       drupal/drupal-extension:master-dev \
       bex/behat-screenshot \
       phpmd/phpmd \

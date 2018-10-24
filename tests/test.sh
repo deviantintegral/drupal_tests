@@ -26,6 +26,9 @@ test_ci() {
 
     circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
 
+    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-functional-tests
+    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-functional-js-tests
+
     circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-behat-tests | tee behat.log
     egrep "1 scenario \\(.*1 passed" behat.log
 

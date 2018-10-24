@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
 test_ci() {
-  ../setup.sh $1 | tee setup.log
+  ../../setup.sh $1 | tee setup.log
   grep "$1" setup.log
 
   circleci config validate

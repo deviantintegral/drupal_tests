@@ -5,6 +5,7 @@
 export SIMPLETEST_BASE_URL="http://localhost"
 export SIMPLETEST_DB="sqlite://localhost//tmp/drupal.sqlite"
 export BROWSERTEST_OUTPUT_DIRECTORY="/var/www/html/sites/simpletest"
+export MINK_DRIVER_ARGS_WEBDRIVER='["chrome", null, "http://localhost:4444/wd/hub"]'
 
 if [ ! -f dependencies_updated ]
 then

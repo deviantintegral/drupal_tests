@@ -42,7 +42,7 @@ RUN cd /var/www/html \
   && cp composer.json composer.json.original \
   && cp composer.lock composer.lock.original \
   && mv vendor vendor.original \
-  && composer require --dev \
+  && composer require --update-with-all-dependencies --dev \
       cweagans/composer-patches \
       behat/mink-selenium2-driver:1.3.x-dev \
       behat/mink-extension:v2.2 \

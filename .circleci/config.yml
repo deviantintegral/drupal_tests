@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Update dependencies
           command: |
-            ./tests/update-dependencies.sh
+            ./tests/update-dependencies.sh $CIRCLE_BRANCH
 
       - run:
           name: Run tests

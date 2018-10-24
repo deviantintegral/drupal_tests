@@ -8,8 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-* Update to Drupal 8.6 #49
-* Selenium has been upgraded to 3.14.0 #49
+* Updates to Drupal 8.6 #49
+  * Selenium has been upgraded to 3.14.0
+  * Full support for Functional Javascript tests
+  * Fixes running all tests in the unit/kernel test job
+  * `test-js.sh` has been renamed to `behat.sh`.
+  * `test-functional.sh` and `test-functional-js.sh` hooks have been added.
 
 ## [0.3.4] - 2018-04-04
 

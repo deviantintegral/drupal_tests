@@ -11,8 +11,14 @@ jobs:
       - checkout
 
       - run:
+          name: Update dependencies
+          command: |
+            ./tests/update-dependencies.sh
+
+      - run:
           name: Run tests
-          command: ./test.sh
+          command: |
+            ./tests/test.sh
 
       - run:
           name: Move artifacts
@@ -34,8 +40,14 @@ jobs:
       - checkout
 
       - run:
+          name: Update dependencies
+          command: |
+            ./tests/update-dependencies.sh $CIRCLE_BRANCH
+
+      - run:
           name: Run tests
-          command: ./test.sh $CIRCLE_BRANCH
+          command: |
+            ./tests/test.sh $CIRCLE_BRANCH
 
       - run:
           name: Move artifacts

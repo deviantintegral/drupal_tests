@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* Update drupal core to 8.6.7
+
+## [0.4.0] - 2018-10-29
+
+### Changed
+
 * Updates to Drupal 8.6 #49
   * Selenium has been upgraded to 3.14.0
   * Full support for Functional Javascript tests

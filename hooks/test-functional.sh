@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-# CI test.sh hook implementation.
+# CI test-functional.sh hook implementation.
 
 export SIMPLETEST_BASE_URL="http://localhost"
 export SIMPLETEST_DB="sqlite://localhost//tmp/drupal.sqlite"
@@ -16,4 +16,4 @@ apache2-foreground&
 
 robo override:phpunit-config $1
 
-sudo -E -u www-data vendor/bin/phpunit -c core --group $1 --testsuite unit,kernel --debug --verbose --log-junit artifacts/phpunit/phpunit.xml
+sudo -E -u www-data vendor/bin/phpunit -c core --group $1 --testsuite functional --debug --verbose --log-junit artifacts/phpunit/phpunit.xml

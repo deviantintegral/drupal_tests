@@ -1,10 +1,11 @@
 #!/bin/bash -ex
 
-# CI test.sh hook implementation.
+# CI test-functional-js.sh hook implementation.
 
 export SIMPLETEST_BASE_URL="http://localhost"
 export SIMPLETEST_DB="sqlite://localhost//tmp/drupal.sqlite"
 export BROWSERTEST_OUTPUT_DIRECTORY="/var/www/html/sites/simpletest"
+export MINK_DRIVER_ARGS_WEBDRIVER='["chrome", null, "http://localhost:4444/wd/hub"]'
 
 if [ ! -f dependencies_updated ]
 then
@@ -16,4 +17,4 @@ apache2-foreground&
 
 robo override:phpunit-config $1
 
-sudo -E -u www-data vendor/bin/phpunit -c core --group $1 --testsuite unit,kernel --debug --verbose --log-junit artifacts/phpunit/phpunit.xml
+sudo -E -u www-data vendor/bin/phpunit -c core --group $1 --testsuite functional-javascript --debug --verbose --log-junit artifacts/phpunit/phpunit.xml

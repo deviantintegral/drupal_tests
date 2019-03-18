@@ -24,11 +24,7 @@ test_ci() {
     # We need to skip colour codes
     egrep "Applying patches for .*drupal/coder" code-sniffer.log
 
-    # Disable test failures here until
-    # https://github.com/deviantintegral/drupal_tests/issues/53 is in. Core
-    # added a Functional test in the node group to the Views module, which
-    # doesn't work in our current test scaffolding.
-    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests || true
+    circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-unit-kernel-tests
 
     circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-functional-tests
     circleci.sh -e CIRCLE_PROJECT_REPONAME=node build --job run-functional-js-tests

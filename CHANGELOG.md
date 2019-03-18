@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* Deprecation helpers are now disabled by default #54
+
+## [0.4.0] - 2018-10-29
+
+### Changed
+
 * Updates to Drupal 8.6 #49
   * Selenium has been upgraded to 3.14.0
   * Full support for Functional Javascript tests

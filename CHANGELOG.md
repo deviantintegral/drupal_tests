@@ -8,12 +8,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* Deprecation helpers are now disabled by default #54
+
+## [0.4.0] - 2018-10-29
+
+### Changed
+
 * Updates to Drupal 8.6 #49
   * Selenium has been upgraded to 3.14.0
   * Full support for Functional Javascript tests
   * Fixes running all tests in the unit/kernel test job
   * `test-js.sh` has been renamed to `behat.sh`.
   * `test-functional.sh` and `test-functional-js.sh` hooks have been added.
+
+## [0.3.5] - 2019-03-18
+
+### Changed
+
+* Fix build errors updating to Drupal 8.5.13.
 
 ## [0.3.4] - 2018-04-04
 

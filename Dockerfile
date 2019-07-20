@@ -77,11 +77,6 @@ COPY settings.php /var/www
 RUN mkdir -p /var/www/html/sites/default/files/config_yt3arM1I65-zRJQc52H_nu_xyV-c4YyQ86uwM1E3JBCvD3CXL38O8JqAxqnWWj8rHRiigYrj0w/sync \
   && chown -Rv www-data /var/www/html/sites/default/files
 
-# Patch Drupal to avoid a bug where behat failures show as passes.
-# https://www.drupal.org/project/drupal/issues/2927012#comment-12467957
-RUN cd /var/www/html \
-  && curl https://www.drupal.org/files/issues/2927012.22-log-error-exit-code.patch | patch -p1
-
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"
 

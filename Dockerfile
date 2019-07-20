@@ -1,4 +1,17 @@
-FROM drupal:8.6-apache
+FROM drupal:8-apache
+
+RUN curl -L https://github.com/deviantintegral/drupal-update-client/releases/download/0.1.1/duc.phar -o /usr/local/bin/duc && \
+  chmod +x /usr/local/bin/duc
+
+WORKDIR /var/www
+
+RUN rm -rf html
+RUN duc project:extract drupal 8.x && \
+  mv drupal-* html
+
+WORKDIR /var/www/html
+
+RUN chown -R www-data:www-data sites modules themes
 
 RUN apt-get update
 

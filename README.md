@@ -30,7 +30,7 @@ If you want to test a whole Drupal site, and not an individual module, see
 ## Features
 
 * A Dockerfile extending the
-  [official Drupal image](https://hub.docker.com/_/drupal/) to support
+  [official PHP image](https://hub.docker.com/_/php/) to support
   Composer, Robo, and code coverage reports.
 * Templates for jobs running with CircleCI.
 * Most of the logic is in shell scripts and Robo commands, making it easy to

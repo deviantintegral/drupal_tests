@@ -70,7 +70,8 @@ jobs:
       - setup_remote_docker
       - run:
         name: Quay.io login
-        command: docker login -u=$QUAY_USER -p=$QUAY_TOKEN
+        command: |
+          docker login -u=$QUAY_USER -p=$QUAY_TOKEN
 
       - run:
         name: Build image

@@ -95,6 +95,9 @@ RUN pecl install imagick
 RUN PHP_EXTENSION_DIR=$(php -r 'echo ini_get("extension_dir");') && \
   echo "extension=$PHP_EXTENSION_DIR/imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
 
+# unzip is recommended for composer over the zip extension
+RUN apt-get install -y unzip
+
 # Install composer.
 COPY install-composer.sh /usr/local/bin/
 RUN install-composer.sh

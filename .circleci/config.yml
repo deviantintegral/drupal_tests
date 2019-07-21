@@ -69,16 +69,16 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-        name: Quay.io login
-        command: |
-          docker login -u=$QUAY_USER -p=$QUAY_TOKEN
+          name: Quay.io login
+          command: |
+            docker login -u=$QUAY_USER -p=$QUAY_TOKEN
 
       - run:
-        name: Build image
-        command: |
-          git checkout 0.4.0
-          docker build -t quay.io/andrewberry/drupal_tests:0.4.0 && \
-          docker push quay.io/andrewberry/drupal_tests:0.4.0
+          name: Build image
+          command: |
+            git checkout 0.4.0
+            docker build -t quay.io/andrewberry/drupal_tests:0.4.0 && \
+            docker push quay.io/andrewberry/drupal_tests:0.4.0
 
 workflows:
   version: 2

@@ -86,12 +86,14 @@ RUN apt-get install -y fontconfig
 
 # xdebug isn't available as a prebuilt extension in the parent image.
 RUN pecl install xdebug
-RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini
+RUN PHP_EXTENSION_DIR=$(php -r 'echo ini_get("extension_dir");') && \
+  echo "zend_extension=$PHP_EXTENSION_DIR/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
 
 # We use imagemagick to support behat screenshots
 RUN apt-get install -y imagemagick libmagickwand-dev
 RUN pecl install imagick
-RUN echo 'extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/imagick.so' > /usr/local/etc/php/conf.d/imagick.ini
+RUN PHP_EXTENSION_DIR=$(php -r 'echo ini_get("extension_dir");') && \
+  echo "extension=$PHP_EXTENSION_DIR/imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
 
 # Install composer.
 COPY install-composer.sh /usr/local/bin/

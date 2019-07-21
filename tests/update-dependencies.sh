@@ -28,6 +28,6 @@ fi
 
 git clone git@github.com:deviantintegral/drupal_tests_node_example.git node
 cd node
-git checkout drupal-node-86
+git checkout drupal-node-87
 
 echo 'Test dependencies set up.'

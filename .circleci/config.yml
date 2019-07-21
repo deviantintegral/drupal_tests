@@ -71,7 +71,7 @@ jobs:
       - run:
           name: Quay.io login
           command: |
-            docker login -u=$QUAY_USER -p=$QUAY_TOKEN
+            echo $QUAY_TOKEN | docker login -u=$QUAY_USER --password-stdin quay.io
 
       - run:
           name: Build image

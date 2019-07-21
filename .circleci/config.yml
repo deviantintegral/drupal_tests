@@ -69,6 +69,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Install git
+          command: |
+            apk install git
+
+      - run:
           name: Quay.io login
           command: |
             echo $QUAY_TOKEN | docker login -u=$QUAY_USER --password-stdin quay.io

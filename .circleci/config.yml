@@ -93,12 +93,12 @@ workflows:
       - build
       - build_with_branch
   update_images:
-#    triggers:
-#      - schedule:
-#          cron: "0, 1, * * *"
-#          filters:
-#            branches:
-#              only:
-#                - master
+    triggers:
+      - schedule:
+          cron: "0, 1, * * *"
+          filters:
+            branches:
+              only:
+                - master
     jobs:
       - build_and_push

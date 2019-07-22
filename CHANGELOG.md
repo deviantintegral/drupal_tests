@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+* Upgraded to Drupal 8.7 #57
+* Images have been moved to quay.io #57
+* Images now use `php` instead of `drupal` as their base #57
+* Images are now rebuilt daily instead of relying on broken autobuilds from Hub #57
 * Deprecation helpers are now disabled by default #54
 
 ## [0.4.0] - 2018-10-29

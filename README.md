@@ -195,17 +195,14 @@ Status: Downloaded newer image for andrewberry/drupal_tests:0.0.3
 
 When a new minor version of Drupal is released:
 
-1. Update the `Dockerfile` to point to a new release, such as
-   `FROM drupal:8.4-apache`.
-1. Build the container locally with `docker build -t drupal-8.4-test .`.
+1. Update the `Dockerfile` to point to the latest stable PHP release, such as
+   `FROM php:7.3-apache`.
+1. Build the container locally with `docker build -t drupal-8.8-test .`.
 1. In a module locally, update `.circleci/config.yml` to with
-   `-image: drupal-8.4-test`.
+   `-image: drupal-8.8-test`.
 1. Test locally with `circleci build --job run-unit-kernel-tests` and so on for
    each job.
 1. Submit a pull request to this repository.
-1. Add a
-   [build configuration](https://hub.docker.com/r/andrewberry/drupal_tests/~/settings/automated-builds/)
-   in Docker Hub with the new tag to ensure linked repositories cause a
-   rebuild.
+1. Update the circle config to automatically rebuild the tag daily.
 1. After merging and when Docker hub has built a new tag, update your
    `config.yml` to point to it.

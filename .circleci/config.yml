@@ -79,11 +79,11 @@ jobs:
             echo $QUAY_TOKEN | docker login -u=$QUAY_USER --password-stdin quay.io
 
       - run:
-          name: Build image
+          name: Build 0.5.0-drupal87 image
           command: |
-            git checkout 0.4.0
-            docker build -t quay.io/deviantintegral/drupal_tests:0.4.0 . && \
-            docker push quay.io/deviantintegral/drupal_tests:0.4.0
+            git checkout 0.5.0-drupal87
+            docker build -t quay.io/deviantintegral/drupal_tests:0.5.0-drupal87 . && \
+            docker push quay.io/deviantintegral/drupal_tests:0.5.0-drupal87
 
 workflows:
   version: 2

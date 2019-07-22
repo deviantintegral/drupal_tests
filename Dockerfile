@@ -1,4 +1,77 @@
-FROM drupal:8.6-apache
+# from https://www.drupal.org/docs/8/system-requirements/drupal-8-php-requirements
+FROM php:7.3-apache-stretch
+# TODO switch to buster once https://github.com/docker-library/php/issues/865 is resolved in a clean way (either in the PHP image or in PHP itself)
+
+# install the PHP extensions we need
+RUN set -eux; \
+	\
+	if command -v a2enmod; then \
+		a2enmod rewrite; \
+	fi; \
+	\
+	savedAptMark="$(apt-mark showmanual)"; \
+	\
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		libfreetype6-dev \
+		libjpeg-dev \
+		libpng-dev \
+		libpq-dev \
+		libzip-dev \
+	; \
+	\
+	docker-php-ext-configure gd \
+		--with-freetype-dir=/usr \
+		--with-jpeg-dir=/usr \
+		--with-png-dir=/usr \
+	; \
+	\
+	docker-php-ext-install -j "$(nproc)" \
+		gd \
+		opcache \
+		pdo_mysql \
+		pdo_pgsql \
+		zip \
+	; \
+	\
+# reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
+	apt-mark auto '.*' > /dev/null; \
+	apt-mark manual $savedAptMark; \
+	ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
+		| awk '/=>/ { print $3 }' \
+		| sort -u \
+		| xargs -r dpkg-query -S \
+		| cut -d: -f1 \
+		| sort -u \
+		| xargs -rt apt-mark manual; \
+	\
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	rm -rf /var/lib/apt/lists/*
+
+# set recommended PHP.ini settings
+# see https://secure.php.net/manual/en/opcache.installation.php
+RUN { \
+		echo 'opcache.memory_consumption=128'; \
+		echo 'opcache.interned_strings_buffer=8'; \
+		echo 'opcache.max_accelerated_files=4000'; \
+		echo 'opcache.revalidate_freq=60'; \
+		echo 'opcache.fast_shutdown=1'; \
+	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+WORKDIR /var/www/html
+
+RUN curl -L https://github.com/deviantintegral/drupal-update-client/releases/download/0.1.1/duc.phar -o /usr/local/bin/duc && \
+  chmod +x /usr/local/bin/duc
+
+WORKDIR /var/www
+
+RUN rm -rf html
+RUN duc project:extract drupal 8.x && \
+  mv drupal-* html
+
+WORKDIR /var/www/html
+
+RUN chown -R www-data:www-data sites modules themes
 
 RUN apt-get update
 
@@ -13,12 +86,17 @@ RUN apt-get install -y fontconfig
 
 # xdebug isn't available as a prebuilt extension in the parent image.
 RUN pecl install xdebug
-RUN echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so' > /usr/local/etc/php/conf.d/xdebug.ini
+RUN PHP_EXTENSION_DIR=$(php -r 'echo ini_get("extension_dir");') && \
+  echo "zend_extension=$PHP_EXTENSION_DIR/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
 
 # We use imagemagick to support behat screenshots
 RUN apt-get install -y imagemagick libmagickwand-dev
 RUN pecl install imagick
-RUN echo 'extension=/usr/local/lib/php/extensions/no-debug-non-zts-20170718/imagick.so' > /usr/local/etc/php/conf.d/imagick.ini
+RUN PHP_EXTENSION_DIR=$(php -r 'echo ini_get("extension_dir");') && \
+  echo "extension=$PHP_EXTENSION_DIR/imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
+
+# unzip is recommended for composer over the zip extension
+RUN apt-get install -y unzip
 
 # Install composer.
 COPY install-composer.sh /usr/local/bin/
@@ -63,11 +141,6 @@ COPY drupal.sql.gz /var/www
 COPY settings.php /var/www
 RUN mkdir -p /var/www/html/sites/default/files/config_yt3arM1I65-zRJQc52H_nu_xyV-c4YyQ86uwM1E3JBCvD3CXL38O8JqAxqnWWj8rHRiigYrj0w/sync \
   && chown -Rv www-data /var/www/html/sites/default/files
-
-# Patch Drupal to avoid a bug where behat failures show as passes.
-# https://www.drupal.org/project/drupal/issues/2927012#comment-12467957
-RUN cd /var/www/html \
-  && curl https://www.drupal.org/files/issues/2927012.22-log-error-exit-code.patch | patch -p1
 
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"

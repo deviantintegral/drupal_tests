@@ -58,6 +58,33 @@ jobs:
       - store_artifacts:
           path: artifacts
 
+  build_and_push:
+    docker:
+      - image: docker:18.09
+
+    environment:
+      - CI_SYSTEM: circleci
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install git
+          command: |
+            apk add git
+
+      - run:
+          name: Quay.io login
+          command: |
+            echo $QUAY_TOKEN | docker login -u=$QUAY_USER --password-stdin quay.io
+
+      - run:
+          name: Build image
+          command: |
+            git checkout 0.4.0
+            docker build -t quay.io/deviantintegral/drupal_tests:0.4.0 . && \
+            docker push quay.io/deviantintegral/drupal_tests:0.4.0
+
 workflows:
   version: 2
   test_both_versions:
@@ -65,3 +92,13 @@ workflows:
       # This tests both ./setup.sh and ./setup.sh <branch>
       - build
       - build_with_branch
+  update_images:
+    triggers:
+      - schedule:
+          cron: "0 1 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build_and_push

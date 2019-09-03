@@ -122,7 +122,7 @@ RUN cd /var/www/html \
   && mv vendor vendor.original \
   && composer require --update-with-all-dependencies --dev \
       cweagans/composer-patches \
-      behat/mink-selenium2-driver:1.4.x-dev \
+      "behat/mink-selenium2-driver:1.4.x-dev as 1.3.x-dev" \
       behat/mink-extension:v2.2 \
       drupal/coder:8.2.* \
       drupal/drupal-extension:master-dev \

@@ -92,13 +92,13 @@ workflows:
       # This tests both ./setup.sh and ./setup.sh <branch>
       - build
       - build_with_branch
-  update_images:
-    triggers:
-      - schedule:
-          cron: "0 1 * * *"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - build_and_push
+#  update_images:
+#    triggers:
+#      - schedule:
+#          cron: "0 1 * * *"
+#          filters:
+#            branches:
+#              only:
+#                - master
+#    jobs:
+#      - build_and_push

@@ -1,6 +1,5 @@
 # from https://www.drupal.org/docs/8/system-requirements/drupal-8-php-requirements
-FROM php:7.3-apache-stretch
-# TODO switch to buster once https://github.com/docker-library/php/issues/865 is resolved in a clean way (either in the PHP image or in PHP itself)
+FROM php:7.4-apache-buster
 
 # install the PHP extensions we need
 RUN set -eux; \
@@ -21,9 +20,8 @@ RUN set -eux; \
 	; \
 	\
 	docker-php-ext-configure gd \
-		--with-freetype-dir=/usr \
-		--with-jpeg-dir=/usr \
-		--with-png-dir=/usr \
+		--with-freetype \
+		--with-jpeg=/usr \
 	; \
 	\
 	docker-php-ext-install -j "$(nproc)" \
@@ -111,8 +109,6 @@ RUN apt-get install -y libxslt-dev
 RUN docker-php-ext-install bcmath xsl
 
 RUN apt-get install -y mariadb-client
-
-RUN composer global require hirak/prestissimo
 
 # Cache currently used libraries to improve build times. We need to force
 # discarding changes as Drupal removes test code in /vendor.

@@ -94,13 +94,16 @@ class RoboFile extends \Robo\Tasks
      */
     public function addModules(array $modules)
     {
+        $this->requireComposerMergePlugin();
         $config = json_decode(file_get_contents('composer.json'));
 
         foreach ($modules as $module) {
             list($module,) = explode(':', $module);
-            $config->extra->{"merge-plugin"}->include[] = "modules/$module/composer.json";
-            $base = isset($config->extra->{"patches"}) ?  (array)$config->extra->{"patches"} : [];
-            $config->extra->{"patches"} = (object)array_merge($base,
+            $merge_plugin = $config->extra->{"merge-plugin"} ?? new \stdClass();
+            $merge_plugin->include[] = "modules/$module/composer.json";
+            $config->extra->{"merge-plugin"} = $merge_plugin;
+            $patches = isset($config->extra->{"patches"}) ? (array)$config->extra->{"patches"} : [];
+            $config->extra->{"patches"} = (object)array_merge($patches,
               (array)$this->getPatches($module));
         }
 
@@ -376,6 +379,16 @@ class RoboFile extends \Robo\Tasks
         } else {
             return 'Clover report was not found at ' . $path;
         }
+    }
+
+    /**
+     * Require composer merge plugin for incorporating module under test deps.
+     */
+    public function requireComposerMergePlugin() {
+      $this->taskComposerRequire()
+        ->optimizeAutoloader()
+        ->dependency('wikimedia/composer-merge-plugin', '^2.0')
+        ->run();
     }
 
 }

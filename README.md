@@ -79,8 +79,6 @@ If you ran `setup.sh` these steps have been done automatically.
 1. In your module's directory, include the required development dependencies:
    ```sh
    $ composer require --dev --no-update \
-       behat/mink-selenium2-driver \
-       drupal/coder \
        drupal/drupal-extension \
        bex/behat-screenshot \
        phpmd/phpmd \

@@ -56,21 +56,6 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-WORKDIR /var/www/html
-
-RUN curl -L https://github.com/deviantintegral/drupal-update-client/releases/download/0.1.1/duc.phar -o /usr/local/bin/duc && \
-  chmod +x /usr/local/bin/duc
-
-WORKDIR /var/www
-
-RUN rm -rf html
-RUN duc project:extract drupal 8.x && \
-  mv drupal-* html
-
-WORKDIR /var/www/html
-
-RUN chown -R www-data:www-data sites modules themes
-
 RUN apt-get update
 
 # Install Git and wget.
@@ -110,18 +95,26 @@ RUN docker-php-ext-install bcmath xsl
 
 RUN apt-get install -y mariadb-client
 
+# Install Drupal.
+WORKDIR /var/www
+
+RUN rm -rf html
+RUN composer create-project drupal/legacy-project:^8.9 html
+
+WORKDIR /var/www/html
+
+RUN composer require --update-with-dependencies drupal/core-dev:^8.9 wikimedia/composer-merge-plugin:^2.0
+RUN chown -R www-data:www-data sites modules themes
+
 # Cache currently used libraries to improve build times. We need to force
 # discarding changes as Drupal removes test code in /vendor.
-RUN cd /var/www/html \
-  && cp composer.json composer.json.original \
+RUN cp composer.json composer.json.original \
   && cp composer.lock composer.lock.original \
   && mv vendor vendor.original \
   && composer require --update-with-all-dependencies --dev \
       cweagans/composer-patches \
-      behat/mink-selenium2-driver:1.3.x-dev \
       behat/mink-extension:v2.2 \
-      drupal/coder:8.2.* \
-      drupal/drupal-extension:master-dev \
+      drupal/drupal-extension:^4.0 \
       bex/behat-screenshot \
       phpmd/phpmd \
       phpmetrics/phpmetrics \

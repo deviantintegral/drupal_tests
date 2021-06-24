@@ -45,7 +45,7 @@ class RoboFile extends \Robo\Tasks
         // composer config doesn't allow us to set arrays, so we have to do this by
         // hand.
         $config = json_decode(file_get_contents('composer.json'));
-        $config->require->{"drush/drush"} = "~9.0";
+        $config->require->{"drush/drush"} = "~10.0";
         $config->extra->{"enable-patching"} = 'true';
         $config->extra->{"patches"} = new \stdClass();
         file_put_contents('composer.json', json_encode($config));
@@ -74,19 +74,6 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Adds Behat dependencies.
-     */
-    public function addBehatDeps()
-    {
-        $config = json_decode(file_get_contents('composer.json'));
-        $config->require->{"behat/mink-selenium2-driver"} = "^1.3";
-        $config->require->{"drupal/drupal-extension"} = "master-dev";
-        $config->require->{"drush/drush"} = "~9.0";
-        $config->require->{"guzzlehttp/guzzle"} = "^6.0@dev";
-        file_put_contents('composer.json', json_encode($config));
-    }
-
-    /**
      * Adds modules to the merge section.
      *
      * @param array $modules
@@ -94,11 +81,10 @@ class RoboFile extends \Robo\Tasks
      */
     public function addModules(array $modules)
     {
-        $this->requireComposerMergePlugin();
         $config = json_decode(file_get_contents('composer.json'));
 
         foreach ($modules as $module) {
-            list($module,) = explode(':', $module);
+            [$module,] = explode(':', $module);
             $merge_plugin = $config->extra->{"merge-plugin"} ?? new \stdClass();
             $merge_plugin->include[] = "modules/$module/composer.json";
             $config->extra->{"merge-plugin"} = $merge_plugin;
@@ -121,7 +107,7 @@ class RoboFile extends \Robo\Tasks
         $config = json_decode(file_get_contents('composer.json'));
 
         foreach ($modules as $module) {
-            list($module, $version) = explode(':', $module);
+            [$module, $version] = explode(':', $module);
             $config->require->{"drupal/" . $module} = $version;
         }
 
@@ -141,7 +127,7 @@ class RoboFile extends \Robo\Tasks
         // Rebuild the patches array.
         $config->extra->{"patches"} = new \stdClass();
         foreach ($modules as $module) {
-            list($module,) = explode(':', $module);
+            [$module,] = explode(':', $module);
             $config->extra->{"patches"} = (object)array_merge((array)$config->extra->{"patches"},
               (array)$this->getPatches($module));
         }
@@ -379,16 +365,6 @@ class RoboFile extends \Robo\Tasks
         } else {
             return 'Clover report was not found at ' . $path;
         }
-    }
-
-    /**
-     * Require composer merge plugin for incorporating module under test deps.
-     */
-    public function requireComposerMergePlugin() {
-      $this->taskComposerRequire()
-        ->optimizeAutoloader()
-        ->dependency('wikimedia/composer-merge-plugin', '^2.0')
-        ->run();
     }
 
 }

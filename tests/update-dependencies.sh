@@ -17,10 +17,7 @@ sudo php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=comp
 
 # There is a circleci CLI tool in the machine image, but it throws errors about
 # missing files when running builds.
-# @todo It appears that this is an old version of the CircleCI CLI. Getting
-#   output: INFO: We've built a brand new CLI for CircleCI! Please run 'circleci
-#   switch' to upgrade.
-sudo curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci.sh
+curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=$HOME/bin bash
 
 # Docker Hub can take 20 minutes to build and sometimes fails. Instead, we
 # test against a locally built copy of the image when building this branch.

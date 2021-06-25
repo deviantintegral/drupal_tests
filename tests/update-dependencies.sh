@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
-sudo apt-get update -y
-sudo apt-get install php5-cli -y
+sudo apt update -y
+sudo apt install php php-cli php-common php-json php-curl -y
 EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig)
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA384', 'composer-setup.php');")
@@ -17,6 +17,9 @@ sudo php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=comp
 
 # There is a circleci CLI tool in the machine image, but it throws errors about
 # missing files when running builds.
+# @todo It appears that this is an old version of the CircleCI CLI. Getting
+#   output: INFO: We've built a brand new CLI for CircleCI! Please run 'circleci
+#   switch' to upgrade.
 sudo curl -o /usr/local/bin/circleci.sh https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && sudo chmod +x /usr/local/bin/circleci.sh
 
 # Docker Hub can take 20 minutes to build and sometimes fails. Instead, we

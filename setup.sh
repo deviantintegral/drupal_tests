@@ -13,7 +13,7 @@ drupal_tests_install() {
 
   echo "Using $MODULE as the module name and $MODULE_CC as the CamelCase version."
 
-  # Get the latest tag. We have to use the v3 API as GraphQL doens't support
+  # Get the latest tag. We have to use the v3 API as GraphQL doesn't support
   # anonymous access.
   # It is currently sorted in reverse chronological order. To always be correct,
   # we should probably query each tag and then sort, but we want to maintain
@@ -25,13 +25,13 @@ drupal_tests_install() {
     TAG=$1
   fi
 
-  DOCKER_TAG="andrewberry\/drupal_tests:$TAG"
+  DOCKER_TAG="quay.io\/deviantintegral\/drupal_tests:$TAG"
   if [ ! -z "$1" ] && [ ! -z "$CI_SYSTEM" ]
   then
     DOCKER_TAG=$CI_SYSTEM-build
   elif [ "$1" == "master" ]
   then
-    DOCKER_TAG="andrewberry\/drupal_tests:latest"
+    DOCKER_TAG="quay.io\/deviantintegral\/drupal_tests:latest"
   fi
 
   echo "Using $TAG as the config version."
@@ -42,7 +42,7 @@ drupal_tests_install() {
   curl -s -L https://github.com/deviantintegral/drupal_tests/raw/$TAG/templates/circleci-2.0/config.yml > .circleci/config.yml
 
   # Update the container version in the config file.
-  perl -i -pe "s/andrewberry\/drupal_tests:latest/$DOCKER_TAG/g" .circleci/config.yml
+  perl -i -pe "s/quay.io\/deviantintegral\/drupal_tests:latest/$DOCKER_TAG/g" .circleci/config.yml
   perl -i -pe "s/my_module/$MODULE/g" .circleci/config.yml
 
   # Set up phpunit with code coverage for this module.

@@ -103,7 +103,12 @@ RUN composer create-project drupal/legacy-project:^8.9 html
 
 WORKDIR /var/www/html
 
-RUN composer require --update-with-dependencies drupal/core-dev:^8.9 wikimedia/composer-merge-plugin:^2.0
+# The drupal/legacy-project is loose with version constraints. For instance the
+# 8.9.16 tag requires drupal/core-recommended:^8.8. That can open you up to
+# unexpectantly having drupal/core downgraded, which we want to avoid. We
+# specifically require drupal/core-recommended and drupal/core-dev at ^8.9.16
+# for this purpose.
+RUN composer require --update-with-dependencies drupal/core-recommended:^8.9.16 drupal/core-dev:^8.9.16 wikimedia/composer-merge-plugin:^2.0
 RUN chown -R www-data:www-data sites modules themes
 
 # Cache currently used libraries to improve build times. We need to force

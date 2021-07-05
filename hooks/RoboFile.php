@@ -48,19 +48,26 @@ class RoboFile extends \Robo\Tasks
         $config->require->{"drush/drush"} = "~10.0";
         $config->extra->{"enable-patching"} = 'true';
         $config->extra->{"patches"} = new \stdClass();
-        file_put_contents('composer.json', json_encode($config));
+      file_put_contents('composer.json', json_encode($config));
 
-        // Create a directory for our artifacts.
-        $this->taskFilesystemStack()
-          ->mkdir('artifacts')
-          ->mkdir('artifacts/phpunit')
-          ->mkdir('artifacts/phpcs')
-          ->mkdir('artifacts/phpmd')
-          ->run();
+      $this->setupArtifactsDirectory();
+    }
 
-        $this->taskFilesystemStack()
-          ->chown('artifacts', 'www-data', TRUE)
-          ->run();
+    /**
+     * Set up the artifacts directory.
+     */
+    public function setupArtifactsDirectory() {
+      // Create a directory for our artifacts.
+      $this->taskFilesystemStack()
+        ->mkdir('artifacts')
+        ->mkdir('artifacts/phpunit')
+        ->mkdir('artifacts/phpcs')
+        ->mkdir('artifacts/phpmd')
+        ->run();
+
+      $this->taskFilesystemStack()
+        ->chown('artifacts', 'www-data', TRUE)
+        ->run();
     }
 
     /**

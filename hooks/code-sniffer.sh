@@ -7,6 +7,8 @@ then
   ./update-dependencies.sh $1
 fi
 
+robo setup:artifacts-directory
+
 # Install dependencies and configure phpcs
 vendor/bin/phpcs --config-set installed_paths vendor/drupal/coder/coder_sniffer
 

@@ -9,6 +9,7 @@ then
   ./update-dependencies.sh $1
 fi
 
+robo setup:artifacts-directory
 robo override:phpunit-config $1
 
 timeout 60m sudo -E -u www-data robo test:coverage $1 artifacts || true

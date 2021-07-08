@@ -31,7 +31,8 @@ If you want to test a whole Drupal site, and not an individual module, see
 
 * A Dockerfile extending the
   [official PHP image](https://hub.docker.com/_/php/) to support
-  Composer, Robo, and code coverage reports.
+  Composer, Robo, and code coverage reports. Note that the container uses
+  Composer 2.
 * Templates for jobs running with CircleCI.
 * Most of the logic is in shell scripts and Robo commands, making it easy to
   run under a different CI tool.
@@ -53,7 +54,7 @@ module is another good example using this template.
 1. Add a `COMPOSER_AUTH` environment variable to Circle if you are using
    private repositories. See the [composer documentation on `COMPOSER_AUTH`](https://getcomposer.org/doc/03-cli.md#composer-auth)
    for more details.
-1. Push a branch . At this point, all jobs should run, though no tests are
+1. Push a branch. At this point, all jobs should run, though no tests are
    actually being executed.
 1. To override a given hook, copy it to your `.circleci` directory. Then, in
    the run step, copy the script to the root of the project. For example, if
@@ -71,7 +72,7 @@ module is another good example using this template.
 
 If you ran `setup.sh` these steps have been done automatically.
 
-1. Copy all of the files and directories from `templates/module` to the root of
+1. Copy all the files and directories from `templates/module` to the root of
    your new module.
 1. Edit `phpunit.core.xml.dist` and set the whitelist paths for coverage
    reports, replacing `my_module` with your module name.
@@ -79,7 +80,9 @@ If you ran `setup.sh` these steps have been done automatically.
 1. In your module's directory, include the required development dependencies:
    ```sh
    $ composer require --dev --no-update \
-       drupal/drupal-extension \
+       cweagans/composer-patches \
+       behat/mink-extension:v2.2 \
+       drupal/drupal-extension:^4.0 \
        bex/behat-screenshot \
        phpmd/phpmd \
        phpmetrics/phpmetrics
@@ -90,20 +93,17 @@ Unit, Kernel, Functional, and FunctionalJavascript tests all follow the same
 directory structure as with Drupal contributed modules. If the Drupal testbot
 could run your tests, this container should too.
 
-Tests are executed using `run-tests.sh`. Make sure each test class has a proper
-`@group` annotation, and that base classes do not have one. Likewise, make sure
-that each test is in the proper namespace. If a Unit test is in the Kernel
-namespace, things will break in hard-to-debug ways.
-
-FunctionalJavascript tests are not yet supported as we use Behat for those
-types of tests.
+Tests will be executed using `run-tests.sh`. Make sure each test class has a 
+proper `@group` annotation, and that base classes do not have one. Likewise, 
+make sure that each test is in the proper namespace. If a Unit test is in the 
+Kernel namespace, things will break in hard-to-debug ways.
 
 ### Behat tests
 
-Behat tests do not run on drupal.org, but we store them in a similar manner.
-Most Behat implementations are testing sites, and not modules, so their docs
-suggesting tests go in `sites/default/behat` don't apply. Instead, place tests
-in `tests/src/Behat`, so that you end up with:
+Behat tests do not run on drupal.org, but we store them similarly. Most Behat 
+implementations are testing sites, and not modules, so their docs suggesting 
+tests go in `sites/default/behat` don't apply. Instead, place tests in 
+`tests/src/Behat`, so that you end up with:
 
 * `tests/src/Behat`
   * `behat.yml`
@@ -182,7 +182,7 @@ given module.
 ## Testing against a new version of Drupal
 
 The Docker container builds against the stable branch of Drupal core, such as
-8.3.x and not a specific release like 8.3.2. This helps ensure tests always run
+8.9.x and not a specific release like 8.9.16. This helps ensure tests always run
 with the latest security patches. If you need to reproduce a build, see your
 build logs for the specific image that was used:
 
@@ -195,12 +195,15 @@ When a new minor version of Drupal is released:
 
 1. Update the `Dockerfile` to point to the latest stable PHP release, such as
    `FROM php:7.3-apache`.
-1. Build the container locally with `docker build -t drupal-8.8-test .`.
+1. Update `ARG DRUPAL_VERSION_CONSTRAINT` in the `Dockerfile` to reflect the
+   latest minor release. You could also pass this in as an argument to
+   `docker build` in the next step using the `--build-arg` flag.
+1. Build the container locally with `docker build -t drupal-8.9-test .`.
 1. In a module locally, update `.circleci/config.yml` to with
-   `-image: drupal-8.8-test`.
+   `-image: drupal-8.9-test`.
 1. Test locally with `circleci build --job run-unit-kernel-tests` and so on for
    each job.
 1. Submit a pull request to this repository.
-1. Update the circle config to automatically rebuild the tag daily.
+1. Update the CircleCI config to automatically rebuild the tag daily.
 1. After merging and when Docker hub has built a new tag, update your
    `config.yml` to point to it.

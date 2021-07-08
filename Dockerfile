@@ -99,7 +99,8 @@ RUN apt-get install -y mariadb-client
 WORKDIR /var/www
 
 RUN rm -rf html
-RUN composer create-project drupal/legacy-project:^8.9 html
+ARG DRUPAL_VERSION_CONSTRAINT="^8.9"
+RUN composer create-project drupal/legacy-project:$DRUPAL_VERSION_CONSTRAINT html
 
 WORKDIR /var/www/html
 
@@ -108,7 +109,7 @@ WORKDIR /var/www/html
 # unexpectantly having drupal/core downgraded, which we want to avoid. We
 # specifically require drupal/core-recommended and drupal/core-dev at ^8.9
 # for this purpose.
-RUN composer require --update-with-dependencies drupal/core-recommended:^8.9 drupal/core-dev:^8.9 wikimedia/composer-merge-plugin:^2.0 cweagans/composer-patches:^1.7.1
+RUN composer require --update-with-dependencies drupal/core-recommended:$DRUPAL_VERSION_CONSTRAINT drupal/core-dev:$DRUPAL_VERSION_CONSTRAINT wikimedia/composer-merge-plugin:^2.0 cweagans/composer-patches:^1.7.1
 RUN chown -R www-data:www-data sites modules themes
 
 # Cache currently used libraries to improve build times. We need to force
@@ -133,11 +134,11 @@ COPY hooks/* /var/www/html/
 # Commit our preinstalled Drupal database for faster Behat tests.
 COPY drupal.sql.gz /var/www
 COPY settings.php /var/www
-RUN mkdir -p /var/www/html/sites/default/files/config_yt3arM1I65-zRJQc52H_nu_xyV-c4YyQ86uwM1E3JBCvD3CXL38O8JqAxqnWWj8rHRiigYrj0w/sync \
+RUN mkdir -p /var/www/html/sites/default/files/config_8faoX4lvQ9283v0ooiL1iEshqPsvAJpCDEyiKvBVq_kAxWxJVwQFnFp8z5PAuuqyUHEYUfJD2Q/sync \
   && chown -Rv www-data /var/www/html/sites/default/files
 
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"
 
-# We need to expose port 80 for phantomjs containers.
+# We need to expose port 80 for Selenium containers.
 EXPOSE 80

@@ -106,9 +106,9 @@ WORKDIR /var/www/html
 # The drupal/legacy-project is loose with version constraints. For instance the
 # 8.9.16 tag requires drupal/core-recommended:^8.8. That can open you up to
 # unexpectantly having drupal/core downgraded, which we want to avoid. We
-# specifically require drupal/core-recommended and drupal/core-dev at ^8.9.16
+# specifically require drupal/core-recommended and drupal/core-dev at ^8.9
 # for this purpose.
-RUN composer require --update-with-dependencies drupal/core-recommended:^8.9.16 drupal/core-dev:^8.9.16 wikimedia/composer-merge-plugin:^2.0 cweagans/composer-patches:^1.7.1
+RUN composer require --update-with-dependencies drupal/core-recommended:^8.9 drupal/core-dev:^8.9 wikimedia/composer-merge-plugin:^2.0 cweagans/composer-patches:^1.7.1
 RUN chown -R www-data:www-data sites modules themes
 
 # Cache currently used libraries to improve build times. We need to force

@@ -1,6 +1,5 @@
 <?php
 
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
@@ -9,7 +8,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
  *
  * @codingStandardsIgnoreStart
  */
-class MyModuleFeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
+class MyModuleFeatureContext extends RawDrupalContext {
 
   /**
    * Setup for the test suite, enable some required modules and add content

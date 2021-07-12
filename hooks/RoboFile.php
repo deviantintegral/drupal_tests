@@ -72,6 +72,22 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * Set up the browser output directory for functional Javascript tests.
+     */
+    public function setupBrowserOutputDirectory()
+    {
+        // Create a directory for our artifacts.
+        $this->taskFilesystemStack()
+            ->mkdir('sites/simpletest')
+            ->mkdir('sites/simpletest/browser_output')
+            ->run();
+
+        $this->taskFilesystemStack()
+            ->chown('sites/simpletest', 'www-data', TRUE)
+            ->run();
+    }
+
+    /**
      * Adds coding standard dependencies.
      */
     public function addCodingStandardsDeps()

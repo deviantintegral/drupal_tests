@@ -131,6 +131,8 @@ functional_js_tests: &functional_js_tests
         path: /var/www/html/artifacts/phpunit
     - store_artifacts:
         path: /var/www/html/artifacts
+    - store_artifacts:
+        path: /var/www/html/sites/simpletest/browser_output
 
 # Run Behat tests. This command invokes the behat.sh hook.
 behat_tests: &behat_tests

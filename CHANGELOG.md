@@ -4,7 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - YYYY-MM-DD
+## [0.6.0] - 2021-07-21
+
+### Changed
+
+* Upgraded to Drupal 8.9 #66
+* Drupal core is now setup via `composer create-project` rather than
+  [Drupal Update Client](https://github.com/deviantintegral/drupal-update-client).
+* Upstream image updated to PHP 7.4
+* Allow a module to define a phpcs.xml.dist file to override PHPCS rules.
+* Support saving browser output from functional Javascript tests.
+
+## [0.5.0] - 2019-07-22
 
 ### Changed
 

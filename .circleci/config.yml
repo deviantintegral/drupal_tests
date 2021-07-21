@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     machine:
-      image: circleci/classic:201711-01
+      image: ubuntu-2004:202104-01
 
     environment:
       - CI_SYSTEM: circleci
@@ -31,7 +31,7 @@ jobs:
 
   build_with_branch:
     machine:
-      image: circleci/classic:201711-01
+      image: ubuntu-2004:202104-01
 
     environment:
       - CI_SYSTEM: circleci
@@ -60,14 +60,15 @@ jobs:
 
   build_and_push:
     docker:
-      - image: docker:18.09
+      - image: docker:20.10.6
 
     environment:
       - CI_SYSTEM: circleci
 
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.6
       - run:
           name: Install git
           command: |
@@ -79,11 +80,11 @@ jobs:
             echo $QUAY_TOKEN | docker login -u=$QUAY_USER --password-stdin quay.io
 
       - run:
-          name: Build 0.5.0-drupal87 image
+          name: Build 0.6.0-drupal89 image
           command: |
-            git checkout 0.5.0-drupal87
-            docker build -t quay.io/deviantintegral/drupal_tests:0.5.0-drupal87 . && \
-            docker push quay.io/deviantintegral/drupal_tests:0.5.0-drupal87
+            git checkout 0.6.0-drupal89
+            docker build -t quay.io/deviantintegral/drupal_tests:0.6.0-drupal89 . && \
+            docker push quay.io/deviantintegral/drupal_tests:0.6.0-drupal89
 
 workflows:
   version: 2
@@ -92,13 +93,13 @@ workflows:
       # This tests both ./setup.sh and ./setup.sh <branch>
       - build
       - build_with_branch
-#  update_images:
-#    triggers:
-#      - schedule:
-#          cron: "0 1 * * *"
-#          filters:
-#            branches:
-#              only:
-#                - master
-#    jobs:
-#      - build_and_push
+  update_images:
+    triggers:
+      - schedule:
+          cron: "0 1 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build_and_push

@@ -41,16 +41,16 @@ defaults: &defaults
 # We use the composer.json as a way to determine if we can cache our build.
 restore_cache: &restore_cache
   keys:
-  - v4-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
+  - v5-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
   # fallback to using the latest cache if no exact match is found
-  - v4-dependencies-
+  - v5-dependencies-
 
 # If composer.json hasn't changed, restore the Composer cache directory. We
 # don't restore the lock file so we ensure we get updated dependencies.
 save_cache: &save_cache
   paths:
     - /root/.composer/cache/files
-  key: v4-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
+  key: v5-dependencies-{{ checksum "composer.json" }}-{{ checksum "../../composer.json" }}
 
 # Install composer dependencies into the workspace to share with all jobs.
 update_dependencies: &update_dependencies
@@ -131,6 +131,8 @@ functional_js_tests: &functional_js_tests
         path: /var/www/html/artifacts/phpunit
     - store_artifacts:
         path: /var/www/html/artifacts
+    - store_artifacts:
+        path: /var/www/html/sites/simpletest/browser_output
 
 # Run Behat tests. This command invokes the behat.sh hook.
 behat_tests: &behat_tests

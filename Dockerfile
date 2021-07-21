@@ -1,6 +1,5 @@
 # from https://www.drupal.org/docs/8/system-requirements/drupal-8-php-requirements
-FROM php:7.3-apache-stretch
-# TODO switch to buster once https://github.com/docker-library/php/issues/865 is resolved in a clean way (either in the PHP image or in PHP itself)
+FROM php:7.4-apache-buster
 
 # install the PHP extensions we need
 RUN set -eux; \
@@ -21,9 +20,8 @@ RUN set -eux; \
 	; \
 	\
 	docker-php-ext-configure gd \
-		--with-freetype-dir=/usr \
-		--with-jpeg-dir=/usr \
-		--with-png-dir=/usr \
+		--with-freetype \
+		--with-jpeg=/usr \
 	; \
 	\
 	docker-php-ext-install -j "$(nproc)" \
@@ -57,21 +55,6 @@ RUN { \
 		echo 'opcache.revalidate_freq=60'; \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
-
-WORKDIR /var/www/html
-
-RUN curl -L https://github.com/deviantintegral/drupal-update-client/releases/download/0.1.1/duc.phar -o /usr/local/bin/duc && \
-  chmod +x /usr/local/bin/duc
-
-WORKDIR /var/www
-
-RUN rm -rf html
-RUN duc project:extract drupal 8.x && \
-  mv drupal-* html
-
-WORKDIR /var/www/html
-
-RUN chown -R www-data:www-data sites modules themes
 
 RUN apt-get update
 
@@ -112,20 +95,32 @@ RUN docker-php-ext-install bcmath xsl
 
 RUN apt-get install -y mariadb-client
 
-RUN composer global require hirak/prestissimo
+# Install Drupal.
+WORKDIR /var/www
+
+RUN rm -rf html
+ARG DRUPAL_VERSION_CONSTRAINT="^8.9"
+RUN composer create-project drupal/legacy-project:$DRUPAL_VERSION_CONSTRAINT html
+
+WORKDIR /var/www/html
+
+# The drupal/legacy-project is loose with version constraints. For instance the
+# 8.9.16 tag requires drupal/core-recommended:^8.8. That can open you up to
+# unexpectantly having drupal/core downgraded, which we want to avoid. We
+# specifically require drupal/core-recommended and drupal/core-dev at ^8.9
+# for this purpose.
+RUN composer require --update-with-dependencies drupal/core-recommended:$DRUPAL_VERSION_CONSTRAINT drupal/core-dev:$DRUPAL_VERSION_CONSTRAINT wikimedia/composer-merge-plugin:^2.0 cweagans/composer-patches:^1.7.1
+RUN chown -R www-data:www-data sites modules themes
 
 # Cache currently used libraries to improve build times. We need to force
 # discarding changes as Drupal removes test code in /vendor.
-RUN cd /var/www/html \
-  && cp composer.json composer.json.original \
+RUN cp composer.json composer.json.original \
   && cp composer.lock composer.lock.original \
   && mv vendor vendor.original \
   && composer require --update-with-all-dependencies --dev \
       cweagans/composer-patches \
-      behat/mink-selenium2-driver:1.3.x-dev \
       behat/mink-extension:v2.2 \
-      drupal/coder:8.2.* \
-      drupal/drupal-extension:master-dev \
+      drupal/drupal-extension:^4.0 \
       bex/behat-screenshot \
       phpmd/phpmd \
       phpmetrics/phpmetrics \
@@ -139,11 +134,11 @@ COPY hooks/* /var/www/html/
 # Commit our preinstalled Drupal database for faster Behat tests.
 COPY drupal.sql.gz /var/www
 COPY settings.php /var/www
-RUN mkdir -p /var/www/html/sites/default/files/config_yt3arM1I65-zRJQc52H_nu_xyV-c4YyQ86uwM1E3JBCvD3CXL38O8JqAxqnWWj8rHRiigYrj0w/sync \
+RUN mkdir -p /var/www/html/sites/default/files/config_8faoX4lvQ9283v0ooiL1iEshqPsvAJpCDEyiKvBVq_kAxWxJVwQFnFp8z5PAuuqyUHEYUfJD2Q/sync \
   && chown -Rv www-data /var/www/html/sites/default/files
 
 # Add the vendor/bin directory to the $PATH
 ENV PATH="/var/www/html/vendor/bin:${PATH}"
 
-# We need to expose port 80 for phantomjs containers.
+# We need to expose port 80 for Selenium containers.
 EXPOSE 80

@@ -45,22 +45,46 @@ class RoboFile extends \Robo\Tasks
         // composer config doesn't allow us to set arrays, so we have to do this by
         // hand.
         $config = json_decode(file_get_contents('composer.json'));
-        $config->require->{"drush/drush"} = "~9.0";
+        $config->require->{"drush/drush"} = "~10.0";
         $config->extra->{"enable-patching"} = 'true';
         $config->extra->{"patches"} = new \stdClass();
         file_put_contents('composer.json', json_encode($config));
 
+        $this->setupArtifactsDirectory();
+    }
+
+    /**
+     * Set up the artifacts directory.
+     */
+    public function setupArtifactsDirectory()
+    {
         // Create a directory for our artifacts.
         $this->taskFilesystemStack()
-          ->mkdir('artifacts')
-          ->mkdir('artifacts/phpunit')
-          ->mkdir('artifacts/phpcs')
-          ->mkdir('artifacts/phpmd')
-          ->run();
+            ->mkdir('artifacts')
+            ->mkdir('artifacts/phpunit')
+            ->mkdir('artifacts/phpcs')
+            ->mkdir('artifacts/phpmd')
+            ->run();
 
         $this->taskFilesystemStack()
-          ->chown('artifacts', 'www-data', TRUE)
-          ->run();
+            ->chown('artifacts', 'www-data', TRUE)
+            ->run();
+    }
+
+    /**
+     * Set up the browser output directory for functional Javascript tests.
+     */
+    public function setupBrowserOutputDirectory()
+    {
+        // Create a directory for our artifacts.
+        $this->taskFilesystemStack()
+            ->mkdir('sites/simpletest')
+            ->mkdir('sites/simpletest/browser_output')
+            ->run();
+
+        $this->taskFilesystemStack()
+            ->chown('sites/simpletest', 'www-data', TRUE)
+            ->run();
     }
 
     /**
@@ -70,19 +94,6 @@ class RoboFile extends \Robo\Tasks
     {
         $config = json_decode(file_get_contents('composer.json'));
         $config->require->{"drupal/coder"} = "^2.0|^8.2";
-        file_put_contents('composer.json', json_encode($config));
-    }
-
-    /**
-     * Adds Behat dependencies.
-     */
-    public function addBehatDeps()
-    {
-        $config = json_decode(file_get_contents('composer.json'));
-        $config->require->{"behat/mink-selenium2-driver"} = "^1.3";
-        $config->require->{"drupal/drupal-extension"} = "master-dev";
-        $config->require->{"drush/drush"} = "~9.0";
-        $config->require->{"guzzlehttp/guzzle"} = "^6.0@dev";
         file_put_contents('composer.json', json_encode($config));
     }
 
@@ -97,10 +108,12 @@ class RoboFile extends \Robo\Tasks
         $config = json_decode(file_get_contents('composer.json'));
 
         foreach ($modules as $module) {
-            list($module,) = explode(':', $module);
-            $config->extra->{"merge-plugin"}->include[] = "modules/$module/composer.json";
-            $base = isset($config->extra->{"patches"}) ?  (array)$config->extra->{"patches"} : [];
-            $config->extra->{"patches"} = (object)array_merge($base,
+            [$module,] = explode(':', $module);
+            $merge_plugin = $config->extra->{"merge-plugin"} ?? new \stdClass();
+            $merge_plugin->include[] = "modules/$module/composer.json";
+            $config->extra->{"merge-plugin"} = $merge_plugin;
+            $patches = isset($config->extra->{"patches"}) ? (array)$config->extra->{"patches"} : [];
+            $config->extra->{"patches"} = (object)array_merge($patches,
               (array)$this->getPatches($module));
         }
 
@@ -118,7 +131,7 @@ class RoboFile extends \Robo\Tasks
         $config = json_decode(file_get_contents('composer.json'));
 
         foreach ($modules as $module) {
-            list($module, $version) = explode(':', $module);
+            [$module, $version] = explode(':', $module);
             $config->require->{"drupal/" . $module} = $version;
         }
 
@@ -138,7 +151,7 @@ class RoboFile extends \Robo\Tasks
         // Rebuild the patches array.
         $config->extra->{"patches"} = new \stdClass();
         foreach ($modules as $module) {
-            list($module,) = explode(':', $module);
+            [$module,] = explode(':', $module);
             $config->extra->{"patches"} = (object)array_merge((array)$config->extra->{"patches"},
               (array)$this->getPatches($module));
         }

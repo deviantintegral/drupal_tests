@@ -15,6 +15,8 @@ fi
 # This is the command used by the base image to serve Drupal.
 apache2-foreground&
 
+robo setup:artifacts-directory
+robo setup:browser-output-directory
 robo override:phpunit-config $1
 
 sudo -E -u www-data vendor/bin/phpunit -c core --group $1 --testsuite functional-javascript --debug --verbose --log-junit artifacts/phpunit/phpunit.xml

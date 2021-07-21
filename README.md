@@ -152,6 +152,28 @@ The `phpunit.core.xml.dist` configuration file is copied to Drupal's `core`
 directory before running tests. Feel free to edit this file in each module as
 needed.
 
+## Overriding PHPCS configuration
+
+The coding standards job will run against the Drupal coding standard defined
+by the [coder module](https://www.drupal.org/project/coder). If you would like
+to customize the standard that PHPCS uses to check the code in your module,
+add a phpcs.xml.dist file to the root of your module. See the
+[PHPCS docs](https://github.com/squizlabs/PHP_CodeSniffer) for details on how to
+create such a file. An example file that's based on the Drupal standard, but has
+some overrides might look like this:
+
+```xml
+<?xml version="1.0"?>
+<ruleset name="Drupal Tests Node Example" namespace="DrupalTestsNodeExample\CS\Standard">
+    <rule ref="vendor/drupal/coder/coder_sniffer/Drupal">
+        <exclude name="Drupal.Commenting.FunctionComment.MissingReturnComment" />
+        <exclude name="Drupal.Commenting.DocComment.MissingShort" />
+    </rule>
+
+    <exclude-pattern>*.jsx</exclude-pattern>
+</ruleset>
+```
+
 ## Applying patches
 
 Sometimes, a module needs to apply patches to Drupal or another dependency to

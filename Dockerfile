@@ -112,6 +112,15 @@ WORKDIR /var/www/html
 RUN composer require --update-with-dependencies drupal/core-recommended:$DRUPAL_VERSION_CONSTRAINT drupal/core-dev:$DRUPAL_VERSION_CONSTRAINT wikimedia/composer-merge-plugin:^2.0 cweagans/composer-patches:^1.7.1
 RUN chown -R www-data:www-data sites modules themes
 
+# Add allow-plugins config which is necessary as of Composer 2.2.0.
+RUN composer config --no-plugins allow-plugins.composer/installers true \
+	&& composer config --no-plugins allow-plugins.cweagans/composer-patches true \
+	&& composer config --no-plugins allow-plugins.drupal/core-composer-scaffold true \
+	&& composer config --no-plugins allow-plugins.drupal/core-project-message true \
+	&& composer config --no-plugins allow-plugins.drupal/core-vendor-hardening true \
+	&& composer config --no-plugins allow-plugins.wikimedia/composer-merge-plugin true \
+	&& composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+
 # Cache currently used libraries to improve build times. We need to force
 # discarding changes as Drupal removes test code in /vendor.
 RUN cp composer.json composer.json.original \
